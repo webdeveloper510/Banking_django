@@ -1,9 +1,8 @@
-from django.http.response import HttpResponse
-from django.shortcuts import render
 from django.http import HttpResponse
 
 # Create your views here.
 
+def bank_detail(request):
+    return('detail')
 
-def api_test(request):
-    return HttpResponse('working')
+    
