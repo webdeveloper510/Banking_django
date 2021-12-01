@@ -1,8 +1,9 @@
 from django.contrib import admin
-from BankDetails.models import Bank, Transanction_model 
+from BankDetails.models import LocalBank,ForeignBank, Transanction ,UserBalance
 
 # Register your models here.
 
-admin.site.register(Bank)
-admin.site.register(Transanction_model)
-# admin.site.register(UserBalance)
+admin.site.register(LocalBank)
+admin.site.register(ForeignBank)
+admin.site.register(Transanction)
+admin.site.register(UserBalance)

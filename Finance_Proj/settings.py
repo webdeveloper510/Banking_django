@@ -48,10 +48,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'User',
     'BankDetails',
-    'rest_framework'
+    'rest_framework',
+    'crispy_forms'
 ]
 
 # AUTH_USER_MODEL = 'User.CustomUser'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -90,7 +92,7 @@ WSGI_APPLICATION = 'Finance_Proj.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'Finance_db',
+        'NAME': 'BankDb',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
