@@ -1,7 +1,8 @@
-from django.http import HttpResponse
+from django.http.response import HttpResponse
+from django.shortcuts import render , redirect
+from django.contrib import messages
+from django.contrib.auth import login
 
 # Create your views here.
 
 
-def user_detail(request):
-    return HttpResponse('working')

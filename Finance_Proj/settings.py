@@ -36,6 +36,7 @@ except:
     pass
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,7 +48,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'BankDetails',
     'User',
+    'BankDetails',
+    'rest_framework',
+    'crispy_forms'
 ]
+
+# AUTH_USER_MODEL = 'User.CustomUser'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -85,9 +92,11 @@ WSGI_APPLICATION = 'Finance_Proj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_demo_db',
-        'HOST': '127.0.0.1',
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'BankDb',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
         'USER': 'root',
         'PASSWORD': 'Satnam@22'
