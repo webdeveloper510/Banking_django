@@ -36,6 +36,7 @@ except:
     pass
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -46,7 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'User',
+    'BankDetails',
+    'rest_framework'
 ]
+
+# AUTH_USER_MODEL = 'User.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
