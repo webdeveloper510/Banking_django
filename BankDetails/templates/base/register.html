@@ -14,20 +14,11 @@
   <body>
     <div class="container">
         <div class="col-md"></div>
-        {% if messages %}
-        <div class="alert alert-success" role="alert">
-          {{messages}}
-        </div>
-        {% elif %}
-        <div class="alert alert-danger" role="alert">
-          {{messages.error}}
-      </div>
-        {% endif %}
         <div class="col-md-6">
-            <h4>Local Bank Registeration</h4>
-            <div class="container py-5">
+          <div class="container py-5">
+              <h4>Local Bank Registeration</h4>
               <h1>Register</h1>
-              <form action="{% url 'client_Register' %}" method="POST" autocomplete="off">
+              <form method="POST">
                 {% csrf_token %}
                 {{ register_form|crispy }}                    
                 <button type="submit" class="btn btn-primary" type="submit">Register</button>

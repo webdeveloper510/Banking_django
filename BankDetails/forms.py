@@ -1,14 +1,27 @@
 from django import forms
-from django import forms
-from django.db.models import fields
-from django.contrib.auth.forms import UserCreationForm
-from .models import LocalBank
+from .models import LocalBank ,UserProfile
 
-# Create your forms here.
+# class LocalBankForm(forms.ModelForm):
+#     class Meta:
+#         model = LocalBank
+#         fields = "__all__"
 
-class LocalBankForm(UserCreationForm):
-	class Meta:
-		model = LocalBank
-		# password = forms.CharField(label='Enter Password',widget=forms.PasswordInput(attrs={'placeholder': 'alphanumeric password'}))
-		
-		fields = ['name','address','username','password','rountingnumber','Accountnumber']
+
+class LocalBankForm(forms.Form):
+    name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'name'}))
+    address = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'address'}))
+    accountnumber = forms.IntegerField(widget=forms.TextInput(attrs={'placeholder': 'Account Number'}))
+    routingnumber = forms.IntegerField(widget=forms.TextInput(attrs={'placeholder': 'Routing Number'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'username'}))
+    password = forms.CharField(widget=forms.PasswordInput())
+
+class ClientForm(forms.Form):
+    class Meta:
+        name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'name'}))
+        address = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'address'}))
+        accountnumber = forms.IntegerField()
+
+class EditClientForm(forms.Form):
+    class Meta:
+        name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'name'}))
+        address = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'address'}))
