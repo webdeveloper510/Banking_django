@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'BankDetails',
     'User',
-    'BankDetails',
     'rest_framework',
     'crispy_forms'
 ]
@@ -71,7 +70,7 @@ ROOT_URLCONF = 'Finance_Proj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -99,7 +98,7 @@ DATABASES = {
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
         'USER': 'root',
-        'PASSWORD': 'Satnam@22'
+        'PASSWORD': ''
     }
 }
 

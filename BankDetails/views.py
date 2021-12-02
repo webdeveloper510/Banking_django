@@ -1,13 +1,4 @@
-<<<<<<< HEAD
 from django.http import HttpResponse
-
-# Create your views here.
-
-def bank_detail(request):
-    return('detail')
-
-    
-=======
 from django.http.response import HttpResponse
 from django.shortcuts import render ,redirect
 from django.http import JsonResponse
@@ -58,7 +49,6 @@ def login_page(request):
             return redirect('login')
         else:
             messages.error(request, "Invalid Credentials")
-<<<<<<< HEAD
     return render(request,'base/login.html',context={"register_form":user})
 
 
@@ -69,9 +59,9 @@ def add_client(request):
         if clients.is_valid():
             clients.save()
             clientid = clients.id
-            messages.success(request, "Client created  successfully." )
             balance = UserBalance(AccountNumber=request.POST['accountnumber'],BankId=localbankid,UserID=clientid)
             balance.save()
+            messages.success(request, "Client created  successfully." )
             return redirect('addclient')
         messages.error(request, "Something went wrong !!")
     clients = ClientForm()
@@ -87,11 +77,3 @@ def edit_client(request,pk):
             }
             messages.success(request, "Client created  successfully." )
     return render(request,'base/editclient.html',context)
-
-
-
-
-=======
-    return render(request,'base/login.html')
->>>>>>> afb13c41dbdb24802e00f00cbb6da2fc5fe8d7d0
->>>>>>> e7e0ca7df6e51c3d6bd5fffa7394623574400d61
