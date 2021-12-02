@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'BankDetails',
     'User',
     'BankDetails',
     'rest_framework',
@@ -97,11 +98,11 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
-        'OPTIONS':{
-            'init_command':"SET sql_mode = 'STRICT_TRANS_TABLES'"
-        }
+        'USER': 'root',
+        'PASSWORD': 'Satnam@22'
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

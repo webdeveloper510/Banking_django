@@ -1,4 +1,6 @@
 from django.urls import path
+<<<<<<< HEAD
+=======
 from django.urls.resolvers import URLPattern
 from .views import api_transaction,api_balance,localbank_register_request,login_page,add_client,edit_client
 
@@ -11,3 +13,4 @@ urlpatterns= [
     path('editclient/<str:pk>',edit_client,name='edit_client')
 
 ]
+>>>>>>> afb13c41dbdb24802e00f00cbb6da2fc5fe8d7d0
