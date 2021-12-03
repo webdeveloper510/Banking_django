@@ -36,7 +36,6 @@ except:
     pass
 
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -91,7 +90,7 @@ WSGI_APPLICATION = 'Finance_Proj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'BankDb',
         'USER': 'root',
         'PASSWORD': '',
@@ -140,7 +139,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (str(BASE_DIR.joinpath('static')),)
-STATIC_ROOT = str(BASE_DIR.joinpath('assets')) 
+STATIC_ROOT = str(BASE_DIR.joinpath('assets'))
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / '/media'
