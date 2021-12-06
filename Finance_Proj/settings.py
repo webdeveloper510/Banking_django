@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'Finance_Proj.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'BankDb',
+        'NAME': 'dbbank',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on

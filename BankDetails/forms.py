@@ -15,27 +15,25 @@ class LocalBankForm(ModelForm):
                   'rountingnumber', 'username', 'password']
 
 
-class ClientForm(forms.Form):
+class ClientForm(forms.ModelForm):
     class Meta:
-        name = forms.CharField(widget=forms.TextInput(
-            attrs={'placeholder': 'name'}))
-        address = forms.CharField(widget=forms.TextInput(
-            attrs={'placeholder': 'address'}))
-        accountnumber = forms.IntegerField()
+        model = UserProfile
+        fields = '__all__'
 
 
 class EditClientForm(forms.Form):
-    class Meta:
-        name = forms.CharField(widget=forms.TextInput(
-            attrs={'placeholder': 'name'}))
-        address = forms.CharField(widget=forms.TextInput(
-            attrs={'placeholder': 'address'}))
+
+    name = forms.CharField()
+    address = forms.CharField()
+    AccountNumber = forms.CharField()
 
 
 class TransactionForm(forms.ModelForm):
+
     class Meta:
         model = Transaction
-        fields = '__all__'
+        exclude = ('FromBank', 'ForiegnBankrountingnumber')
+        fields = ['Accountnumber','Name','toBank','amount','status']
 
 
 class StatusConfirmForm(forms.ModelForm):

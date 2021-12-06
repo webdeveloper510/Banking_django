@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.urls import path,include
 from django.conf.urls import url
-from  BankDetails import views as cv
-from User import views as fv
+from  BankDetails import views 
+from User import views 
 
 urlpatterns = [
     path('',include('BankDetails.urls')),

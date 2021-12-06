@@ -1,4 +1,3 @@
-{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,14 +10,10 @@
     <div class="container">
         <div class="col">
         </div>
-            <form action="{% url 'make_transaction' %}" method="post">
-                {% csrf_token %}  
-                {{ transaction_form|crispy }}       
-                <button  type="submit">Submit</button>
-            </form>
-
-            <div class="col">
-        </div>
+            <p>
+                {{status}}  
+            </p>
+        <div class="col"></div>
     </div>
 </body>
 </html>

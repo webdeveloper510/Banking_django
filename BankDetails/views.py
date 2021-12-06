@@ -1,4 +1,5 @@
 from django import http
+from django.core.exceptions import EmptyResultSet
 from django.http import HttpResponse
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
@@ -6,6 +7,7 @@ from django.http import JsonResponse
 from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.utils.serializer_helpers import ReturnDict
 from .models import Transaction, UserBalance, LocalBank, UserProfile, UserBalance, ForeignBank
 from .serializers import TransactionSerializers, BalanceSerailizers
 from django.contrib import messages
@@ -14,17 +16,11 @@ from django.db import connection
 from .forms import LocalBankForm, ClientForm, EditClientForm, TransactionForm, StatusConfirmForm
 from django.core.mail import EmailMultiAlternatives
 from rest_framework.test import force_authenticate
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
 
 
 # Create your views here.
-
-
-@api_view(['GET'])
-def api_transaction(request):
-    transcation = Transaction.objects.all()
-    serializer = TransactionSerializers(transcation, many=True)
-    return Response(serializer.data)
-
 
 def localbank_register_request(request):
     if request.method == "POST":
@@ -55,70 +51,53 @@ def login_page(request):
 
 
 def add_client(request):
+    clients = None
     localbankid = request.session.get('localbankid')
-    if request.method == 'POST':
-        clients = ClientForm(request.POST or None)
+    localbankId = LocalBank.objects.get(id=localbankid)
+    clients = ClientForm(request.POST or None)
+    if request.method == "POST":
         if clients.is_valid():
             clients.save()
-            clientid = clients.id
-            request.session['client_id'] = clientid
-            balance = UserBalance(
-                AccountNumber=request.POST['accountnumber'], BankId=localbankid, UserID=clientid)
-            balance.save()
-            messages.success(request, "Client created  successfully.")
-            return redirect('addclient')
+            clientid = UserProfile.objects.latest('id')
+            data_dict = {
+                'AccountNumber': request.POST['accountnumber'], 'BankID': localbankId, 'UserId': clientid}
+            balance = UserBalance.objects.create(**data_dict)
 
-        messages.error(request, "Something went wrong !!")
-    clients = ClientForm()
-    return render(request, 'base/add_client.html')
+    return render(request, 'base/clients.html', context={"clients_form": clients})
 
 
 def edit_client(request, pk):
-    context = None
+    editform = None
+    editform = EditClientForm(request.POST or None)
     if request.method == 'POST':
-        editform = EditClientForm(request.POST or None)
         if editform.is_valid():
-            data = UserProfile.objects.filter(id=pk).update(editform)
-            context = {
-                'data': data,
-            }
+            data = UserProfile.objects.filter(id=pk).update(name=request.POST.get(
+                'name'), address=request.POST.get('address'), accountnumber=request.POST.get('AccountNumber'))
+            obj = UserProfile.objects.get(id=pk)
+            return redirect('edit_client', pk=obj.id)
             messages.success(request, "Client created  successfully.")
-    return render(request, 'base/editclient.html', context)
+    return render(request, 'base/editclient.html',  context={"Editform": editform})
 
-# def make_transaction_request(request, pk):
-
-#     Foreinbankid = ForeignBank.objects.get(id=1)
-#     localbankid = request.session.get('localbankid')
-#     Localbankname = LocalBank.objects.get(id=localbankid)
-
-#     if request.method == 'POST':
-#         Post_Transaction = TransactionForm()
-#         # view = TransactionForm.as_view()
-#         if Post_Transaction.is_valid():
-#             Post_Transaction.amount = 5000
-#             Post_Transaction.save()
-#             # subject, from_email, to = 'Status Pending Email', 'lucky@codenomad.net', 'amit@codenomad.net'
-#             # html_content = '<strong>Please confirm Pending status</strong>'
-#             # msg = EmailMultiAlternatives(
-#             #     subject, from_email, [to])
-#             # msg.send()
-#             messages.success(request, "Transanction created  successfully.")
-#             return HttpResponse('Done')
-#             # response = view(request)
-#             return redirect('base/transactionForm.html')
 
 def make_transaction_request(request):
-
-    if request.method == 'POST':
-        # return HttpResponse(request.POST['amount'])
-        form = TransactionForm(request.POST or None)
-        if form.is_valid():
-            form.amount = request.PSOT['amount']
-            form.save()
-    return render(request,'base/transactionForm.html')
-
-
-
+    localbankid = request.session.get('localbankid')
+    localbank = LocalBank.objects.get(id=localbankid)
+    if request.method == "POST":
+        Tran_form = TransactionForm(request.POST)
+        if Tran_form.is_valid():
+            userid = request.POST['Name']
+            name = UserProfile.objects.get(id=userid)
+            tobank = ForeignBank.objects.get(
+                pk=request.POST.get('toBank'))
+            #routingnumber = str(tobank[0]['rountingnumber'])
+            #toBank = str(tobank[0]['name'])
+            data_dict = {
+                'Accountnumber': request.POST['Accountnumber'], 'Name': name, 'FromBank': localbank,
+                'toBank': ForeignBank.objects.get(), 'status': request.POST.get('status', False), 'amount': request.POST['amount'],
+                'ForiegnBankrountingnumber': tobank}
+            balance = Transaction.objects.create(**data_dict)
+    form = TransactionForm()
+    return render(request, 'base/transactionForm.html', context={"transaction_form": form})
 
 
 def show_transanctions(request):
@@ -128,31 +107,43 @@ def show_transanctions(request):
         'Transaction_data': transaction_record
     }
 
-    # return render(request, 'Showtransactions.html', context)
+    return render(request, 'base/show_transactions.html', context)
 
 
 def get_transaction_status(request):
 
-    records = Transaction.objects.all()
-    status = records.status
+    records = Transaction.objects.get()
 
     context = {
-        'transaction_status': status
+        'status': records.status
     }
-    return redirect('show_transaction', context)
+
+    return render(request, 'base/show_transaction_status.html', context)
 
 
 def confirm_pending_status(request, pk):
-    context = None
     if request.method == 'POST':
-        status = StatusConfirmForm(request.POST['confirm_status'] or None)
-        if status.is_valid():
-            data = UserProfile.objects.filter(id=pk).update(status=status)
-            context = {
-                'status': data
-            }
-            messages.success(request, "Transanction Cofirmed")
-            return redirect('confirm_status')
-        messages.error(request, "Transanction Cofirmed Failed")
-    status = StatusConfirmForm()
-    return render(request, 'confirmstatus.html', context)
+        status_confirmed = request.POST.get('confirm_status', False)
+        Transaction.objects.filter(pk=pk).update(status=status_confirmed)
+        messages.success(request, "Status Has Been  Confirmed successfully.")
+    return render(request, 'base/confirmstatus.html')
+
+
+
+def show_status_comp(request):
+    context = None
+    show_status = Transaction.objects.get()
+    # return HttpResponse(show_status.status)
+    if show_status.status == 'confirmed':
+        return HttpResponse('sdfsdf')
+        reverse('completed_transaction')
+    else:
+        return HttpResponse('Status Not confirmed Yet')
+    # return render(request,'base/transactionDone.html')    
+
+
+
+
+def get_all_users(request):
+    users = UserProfile.objects.all()
+    return HttpResponse(users)

@@ -1,10 +1,11 @@
+from collections import UserList
 from django.urls import path
 from django.urls.resolvers import URLPattern
-from .views import localbank_register_request, api_transaction, login_page, add_client, edit_client, show_transanctions, confirm_pending_status, make_transaction_request
+from .views import localbank_register_request,  login_page, add_client, edit_client, show_transanctions, confirm_pending_status, make_transaction_request,get_transaction_status,confirm_pending_status,get_all_users,show_status_comp
 
 
-urlpatterns = [
-    path('transaction/', api_transaction, name='test'),
+
+urlpatterns  = [
     # path('balance/',BankBalance,name='balance'),
     path('localbank_Register/', localbank_register_request,
          name='localbank_Register'),
@@ -13,6 +14,10 @@ urlpatterns = [
     path('editclient/<str:pk>', edit_client, name='edit_client'),
     path('show_transaction/', show_transanctions, name='show_transaction'),
     path('confirm_status/<str:pk>', confirm_pending_status, name='confirm_status'),
-    path('make_transaction/',make_transaction_request,name='make_transaction')
+    path('make_transaction/', make_transaction_request, name='make_transaction'),
+    path('transaction_status/',get_transaction_status,name="transaction_status"),
+    path('confirm_status/<str:pk>',confirm_pending_status,name='confirm_status'),
+    path('UserList',get_all_users,name='UserList'),
+    path('completed_transaction/',show_status_comp,name='completed_transaction'),
 
 ]
