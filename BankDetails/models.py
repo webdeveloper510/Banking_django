@@ -23,7 +23,7 @@ class ForeignBank(models.Model):
     password = models.CharField(max_length=200, default='')
     rountingnumber = models.CharField(max_length=9, default='')
     username = models.CharField(max_length=200, default='')
-    password = models.CharField(max_length=200, default='')
+    
 
     def __str__(self):
 
@@ -31,7 +31,6 @@ class ForeignBank(models.Model):
 
 
 class LocalBank(models.Model):
-    USERNAME_FIELD = 'username'
     name = models.CharField(max_length=200, default='')
     address = models.CharField(max_length=200, default='')
     username = models.CharField(max_length=200, default='')
@@ -70,5 +69,5 @@ class UserBalance(models.Model):
     BankID = models.ForeignKey(LocalBank, on_delete=models.CASCADE,null=True, blank=True)
     UserId = models.ForeignKey(UserProfile, on_delete=models.CASCADE,null=True, blank=True)
     AccountNumber = models.FloatField(default=0)
-    Balance = models.CharField(max_length=200)
+    Balance = models.CharField(max_length=200,default=0)
 

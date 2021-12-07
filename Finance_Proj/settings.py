@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-wp@-zo4#+$$73_!86=+*aiscm()l@7geumhtigr1mf_c*89^)y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 try:
