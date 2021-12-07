@@ -74,13 +74,13 @@
         headers: {
           "X-CSRFToken": '{{csrf_token}}'
         },
-        url: "{% url 'login' %}",
+        url: "{% url 'foreign_login' %}",
         data: $(this).serialize(), //only input
         success: function (response) {
           console.log(response);
           window.setTimeout(function () {
-            window.location.href = "{% url 'clients'%}";
-          }, 3000);
+            window.location.href = "{% url 'foreign_login'%}";
+          }, 1000);
 
         }
       });

@@ -8,12 +8,26 @@ from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.utils.serializer_helpers import ReturnDict
-from .models import Transaction, UserBalance, LocalBank, UserProfile, UserBalance,ForeignBank
+from .models import (
+    Transaction,
+    UserBalance,
+    LocalBank,
+    UserProfile,
+    UserBalance,
+    ForeignBank,
+)
 from .serializers import TransactionSerializers, BalanceSerailizers
 from django.contrib import messages
 from django.contrib.auth import login
 from django.db import connection
-from .forms import LocalBankForm, ClientForm, EditClientForm, TransactionForm, StatusConfirmForm,ForiegnBankForm
+from .forms import (
+    LocalBankForm,
+    ClientForm,
+    EditClientForm,
+    TransactionForm,
+    StatusConfirmForm,
+    ForiegnBankForm,
+)
 from django.core.mail import EmailMultiAlternatives
 from rest_framework.test import force_authenticate
 from django.shortcuts import get_object_or_404
@@ -22,188 +36,262 @@ from django.urls import reverse
 
 # Create your views here.
 
+
 def localbank_register_request(request):
-  
-  
+
     try:
         form = None
         if request.is_ajax and request.method == "POST":
-             #print(request.POST['username'])
-             
+            # print(request.POST['username'])
+
             myDict = dict(zip(request.POST.keys(), request.POST.values()))
-            del myDict['csrfmiddlewaretoken']
+            del myDict["csrfmiddlewaretoken"]
             form = LocalBank(**myDict)
             instance = form.save()
             return JsonResponse({"instance": "instance"})
-            
-    except Exception as e :
-       
+
+    except Exception as e:
+
         return JsonResponse({"error": e}, status=400)
-   
+
+
 def local_register(request):
     form = LocalBankForm()
-    return render(request=request, template_name="base/register.html", context={"register_form": form})
+    return render(
+        request=request,
+        template_name="base/register.html",
+        context={"register_form": form},
+    )
 
 
 def foreign_register(request):
-    myDict = dict(zip(request.POST.keys(), request.POST.values()))
-    
-    del myDict['csrfmiddlewaretoken']
-    #print(**myDict)
-    form = ForeignBank(**myDict)
+    # myDict = dict(zip(request.POST.keys(), request.POST.values()))
 
-    instance = form.save()
-    print(myDict)
-    # try:
-    #     form = None
-    #     if request.is_ajax and request.method == "POST":
-    #          #print(request.POST['username'])
-             
-    #         myDict = dict(zip(request.POST.keys(), request.POST.values()))
-    #         print(myDict)
-    #         del myDict['csrfmiddlewaretoken']
-    #         form = ForeignBank(**myDict)
-    #         instance = form.save()
-    #         return JsonResponse({"instance": "instance"})
+    # del myDict['csrfmiddlewaretoken']
+    # #print(**myDict)
+    # form = ForeignBank(**myDict)
 
-    # except Exception as e:
-        
-    #     return JsonResponse({"error": e}, status=400)
+    # instance = form.save()
+    # print(myDict)
+    try:
+        form = None
+        if request.is_ajax and request.method == "POST":
+            print(request.POST["name"])
+            myDict = dict(zip(request.POST.keys(), request.POST.values()))
+            del myDict["csrfmiddlewaretoken"]
+            print(myDict)
+            form = ForeignBank(**myDict)
+            instance = form.save()
+            return JsonResponse({"instance": "instance"})
 
-def ForeignBank(request):
+    except Exception as e:
+
+        return JsonResponse({"error": e}, status=400)
+
+
+def Foreign_bank_register(request):
     form = ForiegnBankForm()
-    context = {
-        'reg_form':ForiegnBankForm
-    }
-    return render(request,'base/another_country_bank.html',context)
+    context = {"reg_form": ForiegnBankForm}
+    return render(request, "base/another_country_bank.html", context)
 
+
+def login_local(request):
+    user = LocalBankForm()
+    return render(request, "base/login.html", context={"register_form": user})
 
 
 def login_page(request):
     user = None
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = LocalBank.objects.get(username=username)
-        request.session['localbankid'] = user.id
+    if request.is_ajax and request.method == "POST":
+
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = LocalBank.objects.get(username=username, password=password)
+        print(user)
+        request.session["localbankid"] = user.id
         if username == user.username:
             messages.success(request, "Login successfull.")
-            return redirect('login')
+            return JsonResponse({"instance": "user uploggeddated"})
         else:
             messages.error(request, "Invalid Credentials")
-    return render(request, 'base/login.html', context={"register_form": user})
 
 
 def foreign_login_page(request):
     user = None
     if request.is_ajax and request.method == "POST":
 
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST["username"]
+        password = request.POST["password"]
         user = ForeignBank.objects.get(username=username)
-        print(user)
-        request.session['localbankid'] = user.id
+        password = ForeignBank.objects.get(password=password)
+        print(password)
+        request.session["localbankid"] = user.id
         if username == user.username:
             messages.success(request, "Login successfull.")
-            return redirect('login')
+            return JsonResponse({"instance": "user uploggeddated"})
         else:
             messages.error(request, "Invalid Credentials")
-    return render(request, 'base/login.html', context={"register_form": user})
+    return render(request, "base/foreignlogin.html", context={"register_form": user})
+
+
+def add_client_request(request):
+    clients = ClientForm()
+    return render(request, "base/clients.html", context={"clients_form": clients})
 
 
 def add_client(request):
-    clients = None
-    localbankid = request.session.get('localbankid')
-    localbankId = LocalBank.objects.get(id=localbankid)
-    clients = ClientForm(request.POST or None)
-    if request.method == "POST":
-        if clients.is_valid():
-            clients.save()
-            clientid = UserProfile.objects.latest('id')
-            data_dict = {
-                'AccountNumber': request.POST['accountnumber'], 'BankID': localbankId, 'UserId': clientid}
-            balance = UserBalance.objects.create(**data_dict)
-            return redirect('addclient')
 
-    return render(request, 'base/clients.html', context={"clients_form": clients})
+    clients = None
+    localbankid = request.session.get("localbankid")
+    localbankId = LocalBank.objects.get(id=localbankid)
+
+    try:
+        form = None
+        if request.is_ajax and request.method == "POST":
+            mydict = dict(zip(request.POST.keys(), request.POST.values()))
+            del mydict["csrfmiddlewaretoken"]
+            clients = UserProfile(**mydict)
+            instance = clients.save()
+            clientid = UserProfile.objects.latest("id")
+            data_dict = {
+                "AccountNumber": request.POST["accountnumber"],
+                "BankID": localbankId,
+                "UserId": clientid,
+            }
+            instance = UserBalance.objects.create(**data_dict)
+            return JsonResponse({"instance": "instance"})
+
+    except Exception as e:
+
+        return JsonResponse({"error": e}, status=400)
+
+
+def show_clients(request):
+    clients_record = UserProfile.objects.all().values()
+    context = {"clients_data": clients_record}
+    return render(request, "base/showclients.html", context)
+
+
+def edit_client_request(request, pk):
+    editform = EditClientForm()
+
+    return render(
+        request, "base/editclient.html", context={"Editform": editform, "clientid": pk}
+    )
 
 
 def edit_client(request, pk):
     editform = None
-    editform = EditClientForm(request.POST or None)
-    if request.method == 'POST':
-        if editform.is_valid():
-            data = UserProfile.objects.filter(id=pk).update(name=request.POST.get(
-                'name'), address=request.POST.get('address'), accountnumber=request.POST.get('AccountNumber'))
-            obj = UserProfile.objects.get(id=pk)
-            return redirect('edit_client', pk=obj.id)
-            messages.success(request, "Client created  successfully.")
-    return render(request, 'base/editclient.html',  context={"Editform": editform})
+    try:
+        if request.is_ajax and request.method == "POST":
+            data = UserProfile.objects.filter(id=pk).update(
+                name=request.POST["name"],
+                address=request.POST["address"],
+                accountnumber=request.POST["AccountNumber"],
+            )
+            instance = data
+            return JsonResponse({"instance": "instance"})
+            messages.success(request, "Client updated  successfully.")
+    except Exception as e:
+
+        return JsonResponse({"error": e}, status=400)
+
+
+def transaction(request):
+    Tran_form = TransactionForm()
+    return render(
+        request, "base/transactionForm.html", context={"transaction_form": Tran_form}
+    )
 
 
 def make_transaction_request(request):
-    localbankid = request.session.get('localbankid')
+    localbankid = request.session.get("localbankid")
     localbank = LocalBank.objects.get(id=localbankid)
-    if request.method == "POST":
-        Tran_form = TransactionForm(request.POST)
-        if Tran_form.is_valid():
-            userid = request.POST['Name']
+    print(localbankid)
+    try:
+        if request.is_ajax and request.method == "POST":
+            mydict = dict(zip(request.POST.keys(), request.POST.values()))
+            del mydict["csrfmiddlewaretoken"]
+            userid = request.POST["Name"]
             name = UserProfile.objects.get(id=userid)
-            tobank = ForeignBank.objects.get(
-                pk=request.POST.get('toBank'))
-            #routingnumber = str(tobank[0]['rountingnumber'])
-            #toBank = str(tobank[0]['name'])
+            tobank = ForeignBank.objects.get(id=request.POST["toBank"])
+
             data_dict = {
-                'Accountnumber': request.POST['Accountnumber'], 'Name': name, 'FromBank': localbank,
-                'toBank': ForeignBank.objects.get(), 'status': request.POST.get('status', False), 'amount': request.POST['amount'],
-                'ForiegnBankrountingnumber': tobank}
-            balance = Transaction.objects.create(**data_dict)
-    form = TransactionForm()
-    return render(request, 'base/transactionForm.html', context={"transaction_form": form})
+                "Accountnumber": request.POST["Accountnumber"],
+                "Name": name,
+                "FromBank": localbank,
+                "toBank": tobank,
+                "status": request.POST["status"],
+                "amount": request.POST["amount"],
+                "ForiegnBankrountingnumber": tobank,
+            }
+            instance = Transaction.objects.create(**data_dict)
+            return JsonResponse({"instance": "instance"})
+
+    except Exception as e:
+        return JsonResponse({"error": e}, status=400)
 
 
 def show_transanctions(request):
     context = None
-    transaction_record = Transaction.objects.get()
+    transaction_pending = Transaction.objects.filter(status="pending").values()
+    # return HttpResponse(transaction_pending)
+    transaction_confirm = Transaction.objects.filter(status="confirmed").values()
+    transaction_completed = Transaction.objects.filter(status="complete").values()
+
     context = {
-        'Transaction_data': transaction_record
+        "Transaction_pending": transaction_pending,
+        "Transaction_confirm": transaction_confirm,
+        "Transaction_completed": transaction_completed,
     }
 
-    return render(request, 'base/show_transactions.html', context)
+    return render(request, "base/show_transactions.html", context)
+
+
+def show_foreign_transaction(request):
+
+    context = None
+    transaction_pending = Transaction.objects.filter(status="pending").values()
+    # return HttpResponse(transaction_pending)
+    transaction_confirm = Transaction.objects.filter(status="confirmed").values()
+    transaction_completed = Transaction.objects.filter(status="complete").values()
+
+    context = {
+        "Transaction_pending": transaction_pending,
+        "Transaction_confirm": transaction_confirm,
+        "Transaction_completed": transaction_completed,
+    }
+    return render(request, "base/foreign_transaction.html", context)
 
 
 def get_transaction_status(request):
 
-    records = Transaction.objects.get()
+    records = Transaction.objects.all().values()
+    context = {"status": records}
 
-    context = {
-        'status': records.status
-    }
-
-    return render(request, 'base/show_transaction_status.html', context)
+    return render(request, "base/show_transaction_status.html", context)
 
 
-def confirm_pending_status(request, pk):
-    if request.method == 'POST':
-        status_confirmed = request.POST.get('confirm_status', False)
-        Transaction.objects.filter(pk=pk).update(status=status_confirmed)
+def confirm_status(request, pk):
+
+    if request.is_ajax and request.method == "POST":
+        mydict = dict(zip(request.POST.keys(), request.POST.values()))
+        status_update = str(mydict["status"])
+        instance = Transaction.objects.filter(pk=pk).update(status=status_update)
+        return JsonResponse({"instance": "instance"})
         messages.success(request, "Status Has Been  Confirmed successfully.")
-    return render(request, 'base/confirmstatus.html')
-
 
 
 def show_status_comp(request):
     context = None
     show_status = Transaction.objects.get()
     # return HttpResponse(show_status.status)
-    if show_status.status == 'confirmed':
-        return HttpResponse('sdfsdf')
-        reverse('completed_transaction')
+    if show_status.status == "confirmed":
+        return HttpResponse("sdfsdf")
+        reverse("completed_transaction")
     else:
-        return HttpResponse('Status Not confirmed Yet')
-    # return render(request,'base/transactionDone.html')    
-
-
+        return HttpResponse("Status Not confirmed Yet")
+    # return render(request,'base/transactionDone.html')
 
 
 def get_all_users(request):

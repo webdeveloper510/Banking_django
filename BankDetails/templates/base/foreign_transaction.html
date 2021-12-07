@@ -66,7 +66,6 @@
                         <th>Name</th>
                         <th>Accountnumber</th>
                         <th>From Bank</th>
-                        <th>To Bank</th>
                         <th>Status</th>
                         <th>Amount</th>
                         <th>ForienBank Routing Number</th>
@@ -77,10 +76,12 @@
                     <tr>
                         <td>{{data.Name_id}}</td>
                         <td>{{data.Accountnumber}}</td>
-                        <td>{{data.toBank_id}}</td>
+                        <td>{{data.FromBank_id}}</td>
                         <td>{{data.status}}</td>
                         <td>{{data.amount}}</td>
                         <td>{{data.ForiegnBankrountingnumber_id}}</td>
+                        <td><button data-url="{% url 'confirm_status' data.id %}" class="btn btn-success updateStatus"
+                            data-status="confirmed">Confirm</button></td>
                     </tr>
                     {% endfor %}
 
@@ -94,7 +95,6 @@
                         <th>Name</th>
                         <th>Accountnumber</th>
                         <th>From Bank</th>
-                        <th>To Bank</th>
                         <th>Status</th>
                         <th>Amount</th>
                         <th>ForienBank Routing Number</th>
@@ -105,10 +105,12 @@
                     <tr>
                         <td>{{data.Name_id}}</td>
                         <td>{{data.Accountnumber}}</td>
-                        <td>{{data.toBank_id}}</td>
+                        <td>{{data.FromBank_id}}</td>
                         <td>{{data.status}}</td>
                         <td>{{data.amount}}</td>
                         <td>{{data.ForiegnBankrountingnumber_id}}</td>
+                        <td><button data-url="{% url 'confirm_status' data.id %}" id="complete"
+                            class="btn btn-success updateStatus" data-status="complete">Complete</button></td>
                     </tr>
                     {% endfor %}
 
@@ -122,7 +124,6 @@
                         <th>Name</th>
                         <th>Accountnumber</th>
                         <th>From Bank</th>
-                        <th>To Bank</th>
                         <th>Status</th>
                         <th>Amount</th>
                         <th>ForienBank Routing Number</th>
@@ -133,7 +134,7 @@
                     <tr>
                         <td>{{data.Name_id}}</td>
                         <td>{{data.Accountnumber}}</td>
-                        <td>{{data.toBank_id}}</td>
+                        <td>{{data.FromBank_id}}</td>
                         <td>{{data.status}}</td>
                         <td>{{data.amount}}</td>
                         <td>{{data.ForiegnBankrountingnumber_id}}</td>
@@ -158,3 +159,28 @@
     </script>
 
 </html>
+
+<script>
+    $(".updateStatus").click(function () {
+        var status = $(this).attr('data-status');
+        console.log(status)
+        var url = $(this).attr('data-url');
+        $.ajax({
+            type: "POST",
+            headers: {
+                "X-CSRFToken": '{{csrf_token}}'
+            },
+            url: url,
+            data: {
+                status: status
+            }, //only input
+            success: function (response) {
+                console.log(response);
+                window.setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            }
+        });
+
+    })
+</script>
