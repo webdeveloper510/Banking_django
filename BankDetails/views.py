@@ -1,5 +1,6 @@
 from django import http
 from django.core.exceptions import EmptyResultSet
+from django.db.models.query import RawQuerySet
 from django.http import HttpResponse
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
@@ -32,7 +33,11 @@ from django.core.mail import EmailMultiAlternatives
 from rest_framework.test import force_authenticate
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-
+from datetime import datetime
+from django.utils import formats
+import datetime
+from django.core.mail import send_mail
+from django.conf import settings
 
 # Create your views here.
 
@@ -65,14 +70,7 @@ def local_register(request):
 
 
 def foreign_register(request):
-    # myDict = dict(zip(request.POST.keys(), request.POST.values()))
 
-    # del myDict['csrfmiddlewaretoken']
-    # #print(**myDict)
-    # form = ForeignBank(**myDict)
-
-    # instance = form.save()
-    # print(myDict)
     try:
         form = None
         if request.is_ajax and request.method == "POST":
@@ -117,7 +115,6 @@ def login_page(request):
 
 
 def foreign_login_page(request):
-    user = None
     if request.is_ajax and request.method == "POST":
 
         username = request.POST["username"]
@@ -131,6 +128,11 @@ def foreign_login_page(request):
             return JsonResponse({"instance": "user uploggeddated"})
         else:
             messages.error(request, "Invalid Credentials")
+
+
+def foreign_login(request):
+
+    user = ForiegnBankForm()
     return render(request, "base/foreignlogin.html", context={"register_form": user})
 
 
@@ -205,6 +207,8 @@ def transaction(request):
 
 
 def make_transaction_request(request):
+    dt = datetime.datetime.now()
+    print(dt)
     localbankid = request.session.get("localbankid")
     localbank = LocalBank.objects.get(id=localbankid)
     print(localbankid)
@@ -221,11 +225,20 @@ def make_transaction_request(request):
                 "Name": name,
                 "FromBank": localbank,
                 "toBank": tobank,
-                "status": request.POST["status"],
                 "amount": request.POST["amount"],
                 "ForiegnBankrountingnumber": tobank,
+                "date":dt
             }
             instance = Transaction.objects.create(**data_dict)
+            subject = "Please confirm status"
+            msg = "Congratulations for your success"
+            to = "saurav@codenomad.net"
+            res = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])
+            if res == 1:
+                msg = "Mail Sent Successfuly"
+            else:
+                msg = "Mail could not sent"
+            return HttpResponse(msg)
             return JsonResponse({"instance": "instance"})
 
     except Exception as e:
@@ -234,11 +247,27 @@ def make_transaction_request(request):
 
 def show_transanctions(request):
     context = None
-    transaction_pending = Transaction.objects.filter(status="pending").values()
-    # return HttpResponse(transaction_pending)
-    transaction_confirm = Transaction.objects.filter(status="confirmed").values()
-    transaction_completed = Transaction.objects.filter(status="complete").values()
+    dateInSession = request.session.get("datevalue")
+    typeInSession = request.session.get("typeTab")
 
+    if dateInSession and typeInSession == "pending":
+        transaction_pending = Transaction.objects.filter(
+            status="pending", date=dateInSession
+        ).values()
+    else:
+        transaction_pending = Transaction.objects.filter(status="pending").values()
+    if dateInSession and typeInSession == "confirm":
+        transaction_confirm = Transaction.objects.filter(
+            status="confirmed", confirmdate=dateInSession
+        ).values()
+    else:
+        transaction_confirm = Transaction.objects.filter(status="confirmed").values()
+    if dateInSession and typeInSession == "complete":
+        transaction_completed = Transaction.objects.filter(
+            status="complete", completeddate=dateInSession
+        ).values()
+    else:
+        transaction_completed = Transaction.objects.filter(status="complete").values()
     context = {
         "Transaction_pending": transaction_pending,
         "Transaction_confirm": transaction_confirm,
@@ -251,6 +280,7 @@ def show_transanctions(request):
 def show_foreign_transaction(request):
 
     context = None
+
     transaction_pending = Transaction.objects.filter(status="pending").values()
     # return HttpResponse(transaction_pending)
     transaction_confirm = Transaction.objects.filter(status="confirmed").values()
@@ -264,6 +294,16 @@ def show_foreign_transaction(request):
     return render(request, "base/foreign_transaction.html", context)
 
 
+def date_request(request):
+    date = dict(zip(request.POST.keys(), request.POST.values()))
+    print(date)
+    # del date["csrfmiddlewaretoken"]
+    print(date)
+    request.session["datevalue"] = date["date"]
+    request.session["typeTab"] = date["type"]
+    return redirect("show_transaction")
+
+
 def get_transaction_status(request):
 
     records = Transaction.objects.all().values()
@@ -273,11 +313,13 @@ def get_transaction_status(request):
 
 
 def confirm_status(request, pk):
-
+    now = datetime.datetime.now()
     if request.is_ajax and request.method == "POST":
         mydict = dict(zip(request.POST.keys(), request.POST.values()))
         status_update = str(mydict["status"])
-        instance = Transaction.objects.filter(pk=pk).update(status=status_update)
+        instance = Transaction.objects.filter(pk=pk).update(
+            status=status_update, date=now
+        )
         return JsonResponse({"instance": "instance"})
         messages.success(request, "Status Has Been  Confirmed successfully.")
 
@@ -297,3 +339,35 @@ def show_status_comp(request):
 def get_all_users(request):
     users = UserProfile.objects.all()
     return HttpResponse(users)
+
+
+def index_request(request):
+    return render(request, "base/index.html")
+
+
+def about_request(request):
+    return render(request, "base/about.html")
+
+
+def services_request(request):
+    return render(request, "base/services.html")
+
+
+def contact_request(request):
+    return render(request, "base/contacts.html")
+
+
+def header_request(request):
+    return render(request, "base/header.html")
+
+
+def footer_request(request):
+    return render(request, "base/footer.html")
+
+
+def single_request(request):
+    return render(request, "base/single.html")
+
+
+def blog_request(request):
+    return render(request, "base/blog.html")

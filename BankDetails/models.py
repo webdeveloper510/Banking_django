@@ -1,6 +1,7 @@
 from django.db import models
 from django.db import models
 from django.db.models.fields.related import ForeignKey
+from django.utils import timezone
 
 # # Create your models here.
 
@@ -63,7 +64,7 @@ class Transaction(models.Model):
     toBank = models.ForeignKey(
         ForeignBank, on_delete=models.CASCADE, null=True, blank=True
     )
-    status = models.CharField(max_length=200, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=200, choices=STATUS_CHOICES, default="pending")
     amount = models.FloatField(default=0)
     ForiegnBankrountingnumber = models.ForeignKey(
         ForeignBank,
@@ -73,6 +74,10 @@ class Transaction(models.Model):
         related_name="%(app_label)s_%(class)s_related",
         default="",
     )
+
+    date = models.DateField()
+    confirmdate = models.DateField(default='')
+    completeddate = models.DateField(default='')
 
 
 class UserBalance(models.Model):

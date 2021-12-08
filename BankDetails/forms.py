@@ -47,7 +47,7 @@ class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
         exclude = ("FromBank", "ForiegnBankrountingnumber")
-        fields = ["Accountnumber", "Name", "toBank", "amount", "status"]
+        fields = ["Accountnumber", "Name", "toBank", "amount"]
 
 
 class StatusConfirmForm(forms.ModelForm):

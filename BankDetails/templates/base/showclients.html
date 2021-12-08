@@ -1,62 +1,26 @@
 
+{% include 'base/header.html' %}
+{% load static %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<!DOCTYPE html>
-<html  lang="en">
-  <head>
-    <title>Home</title>
- 
- <link rel="icon" href="images/logo-200x45.png" type="image/png">
-    <!-- Stylesheets-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:100,300,300i,400,700,900">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/style.css" id="main-styles-link">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
-    <link rel="stylesheet" href=" https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
-    <script src=" https://code.jquery.com/jquery-3.5.1.js"></script>
-  </head>
-  <body>
-
-     <!-- Page Header-->
-     <div class="container">
-      <nav class="navbar navbar-expand-lg ">
-        <!-- <a class="navbar-brand" href="index.html"><img src="images/logo-200x45.png"></a> -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto mr-5">
-            <li class="nav-item active">
-              <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="about.html">About</a>
-            </li>
-           
-            <li class="nav-item">
-              <a class="nav-link " href="services.html">Transaction </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link " href="blog.html">Blog</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link " href="login.html">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link " href="contacts.html">Contacts</a>
-            </li>
-          </ul>
-         
-        </div>
-      </nav>
-      </div>
-      <!-- Breadcrumbs -->
+  <section class="section section-bredcrumbs">
+    <div class="container context-dark breadcrumb-wrapper">
+      <h1> All Clients</h1>
+      <ul class="breadcrumbs-custom">
+        <li><a href="index.html">Home</a></li>
+        <li class="active">All Clients</li>
+      </ul>
+    </div>
+  </section>
     
       <section class="container">
+        <div class="text-right mt-3">
+          <a href="{% url 'add_Client' %}" class="btn btn-outline-success" >Create Client</a>
+        </div>
         <div class="card my-5 p-3">
+          <div class="text-center mb-4">
+            <h3>All Clients</h3>
+            </div>
           <table id="example" class="table table-striped table-bordered" style="width:100%">
 
             <thead>
@@ -91,12 +55,8 @@
     $('#example').DataTable();
 } );
    </script>
-   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-   <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
-  
-    <!-- Javascript-->
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	
+ 
+ 
    <script>
     $('#click_btn').click(function(){
         var id = $(this).prev().attr('id');
@@ -105,5 +65,4 @@
     })
 </script>
 
-
-</html>
+{% include 'base/footer.html' %}

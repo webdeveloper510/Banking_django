@@ -1,60 +1,11 @@
-
-<!DOCTYPE html>
-<html  lang="en">
-  <head>
-    <title>Home</title>
- 
- <link rel="icon" href="images/logo-200x45.png" type="image/png">
-    <!-- Stylesheets-->
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:100,300,300i,400,700,900">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-   
-    <link rel="stylesheet" href="css/style.css" >
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-  </head>
-  <body>
- 
-      <!-- Page Header-->
-      <div class="container">
-      <nav class="navbar navbar-expand-lg ">
-        <a class="navbar-brand" href="index.html"><img src="images/logo-200x45.png"></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto mr-5">
-            <li class="nav-item active">
-              <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="about.html">About</a>
-            </li>
-           
-            <li class="nav-item">
-              <a class="nav-link " href="services.html">Transaction</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link " href="blog.html">Blog</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link " href="login.html">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link " href="contacts.html">Contacts</a>
-            </li>
-          </ul>
-         
-        </div>
-      </nav>
-      </div>
-      <!-- Swiper-->
+{% include 'base/header.html' %}
+{% load static %}
+    <!-- Swiper-->
      <section class="slider">
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <img class="d-block w-100" src="images/slider-10-1920x1280.jpeg" alt="First slide">
+            <img class="d-block w-100" src="{% static 'admin/img/slider-10-1920x1280.jpeg' %}" alt="First slide">
            
               <div class="carousel-caption d-none d-md-block">
                 <h1 class="text-white">Where You Know Your Banker and Your Banker Knows You</h1>
@@ -64,7 +15,7 @@
             </div>
           </div>
           <div class="carousel-item">
-            <img class="d-block w-100" src="images/slider-8-1920x1328.jpeg" alt="Second slide">
+            <img class="d-block w-100" src="{% static 'admin/img/slider-8-1920x1328.jpeg' %}" alt="Second slide">
             
               <div class="carousel-caption d-none d-md-block">
                 <h1 class="text-white">Where You Know Your Banker and Your Banker Knows You</h1>
@@ -73,7 +24,7 @@
            
           </div>
           <div class="carousel-item">
-            <img class="d-block w-100" src="images/slider-9-1920x1328.jpg" alt="Third slide">
+            <img class="d-block w-100" src="{% static 'admin/img/slider-9-1920x1328.jpg' %}" alt="Third slide">
             
               <div class="carousel-caption d-none d-md-block">
                 <h1  class="text-white">Where You Know Your Banker and Your Banker Knows You</h1>
@@ -99,21 +50,21 @@
         <div class="row row-flex no-gutters">
           <div class="col-md-6 col-lg-3">
             <div class="blurb-boxed-2">
-              <img src="images/bannericon2.png">
+              <img src=" {% static 'admin/img/bannericon2.png' %}">
               <h6 class="title">More than <span class="font-weight-bold">23 754</span> Issued Cards</h6>
               <p class="exeption">Our bank is an acknowledged leader in credit card distribution. We issue more than 5000 cards every year.</p>
             </div>
           </div>
           <div class="col-md-6 col-lg-3">
             <div class="blurb-boxed-2 blurb-boxed-dark">
-              <img src="images/bannericon1.png">
+              <img src="{% static 'admin/img/bannericon1.png' %}">
               <h6 class="title">Up to <span class="font-weight-bold">30%</span> Cashback</h6>
               <p class="exeption">We offer an amazing amount of cashback for payments made with one of our credit cards - Blue, Green, or Orange.</p>
             </div>
           </div>
           <div class="col-md-6 col-lg-3">
             <div class="blurb-boxed-2 blurb-boxed-darker">
-              <img src="images/bannericon.png">
+              <img src="{% static 'admin/img/bannericon.png' %}">
               <h6 class="title">Up to <span class="font-weight-bold">25%</span> for Deposits</h6>
               <p class="exeption">Prosperity offers various deposits in all international currencies with interest rate up to 25% for all regular clients.</p>
             </div>
@@ -136,42 +87,42 @@
           <div class="row row-30 row-xxl-60">
             <div class="col-sm-6 col-md-4 wow fadeInLeft">
               <div class="blurb-image">
-               <img src="images/ficon.png">
+               <img src="{% static 'admin/img/ficon.png' %}">
                 <h6 class="title">Various Locations</h6>
                 <p class="exeption">We have offices in many countries including the USA and the UK.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4 wow fadeInLeft" data-wow-delay="0.1s">
               <div class="blurb-image">
-                <img src="images/ficon1.png">
+                <img src="{% static 'admin/img/ficon1.png' %}">
                 <h6 class="title">Mobile Banking Apps</h6>
                 <p class="exeption">Get instant access to your account on any device using our banking apps.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4 wow fadeInLeft" data-wow-delay="0.2s">
               <div class="blurb-image">
-                <img src="images/ficon2.png">
+                <img src="{% static 'admin/img/ficon2.png' %}">
                 <h6 class="title">Family &amp; Friends Programs</h6>
                 <p class="exeption">Our Bank has special programs with benefits for family members.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4 wow fadeInLeft" data-wow-delay="0.1s">
               <div class="blurb-image">
-                <img src="images/ficon3.png">
+                <img src="{% static 'admin/img/ficon3.png' %}">
                 <h6 class="title">24/7 Support</h6>
                 <p class="exeption">Our Support team is always ready to help you solve any banking issues.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4 wow fadeInLeft" data-wow-delay="0.2s">
               <div class="blurb-image">
-                <img src="images/ficon4.png">
+                <img src="{% static 'admin/img/ficon4.png' %}">
                 <h6 class="title">Personal Profile</h6>
                 <p class="exeption">Register your free personal profile online to begin using our services.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4 wow fadeInLeft" data-wow-delay="0.3s">
               <div class="blurb-image">
-                <img src="images/ficon5.png">
+                <img src="{% static 'admin/img/ficon5.png' %}">
                 <h6 class="title">Settings</h6>
                 <p class="exeption">Registered clients can edit the banking account settings in 2 clicks.</p>
               </div>
@@ -187,7 +138,7 @@
             <p>Prosperity was founded in 1999 to introduce the new level of financial services worldwide. We are still dedicated to the success of our clients, both individual and corporate.</p>
           </div>
           <div class="row row-20 justify-content-center justify-content-lg-between">
-            <div class="col-md-10 col-lg-6 wow fadeIn"><img class="img-bordered" src="images/index-1-2-570x379.jpg" alt="" width="570" height="379"/>
+            <div class="col-md-10 col-lg-6 wow fadeIn"><img class="img-bordered" src="{% static 'admin/img/index-1-2-570x379.jpg' %}" alt="" width="570" height="379"/>
             </div>
             <div class="col-md-10 col-lg-6 col-xl-5">
               <div class="text-block-2">
@@ -286,28 +237,28 @@
           <div class="row row-40 justify-content-center number-counter">
             <div class="col-sm-6 col-lg-3 wow fadeInLeft">
               <div class="blurb-icon-fill">
-                <img src="images/screencapture.png">
+                <img src="{% static 'admin/img/screencapture.png' %}">
                 <h5 class="title">Online Registration</h5>
                 <p class="exeption">Everything starts with free online registration. Only basic data is needed - name, surname, age etc.</p>
               </div>
             </div>
             <div class="col-sm-6 col-lg-3 wow fadeInLeft" data-wow-delay="0.1s">
               <div class="blurb-icon-fill">
-                <img src="images/screencapture1.png">
+                <img src="{% static 'admin/img/screencapture1.png' %}">
                 <h5 class="title">Filling Out a Form</h5>
                 <p class="exeption">After the basic registration, you will need to fill out a form to help us determine your financial goals.</p>
               </div>
             </div>
             <div class="col-sm-6 col-lg-3 wow fadeInLeft" data-wow-delay="0.2s">
               <div class="blurb-icon-fill">
-                <img src="images/screencapture3.png">
+                <img src="{% static 'admin/img/screencapture3.png' %}">
                 <h5 class="title">Signing an Agreement</h5>
                 <p class="exeption">This stage concludes the procedure of opening an account at Prosperity to start using your card.</p>
               </div>
             </div>
             <div class="col-sm-6 col-lg-3 wow fadeInLeft" data-wow-delay="0.3s">
               <div class="blurb-icon-fill">
-               <img src="images/screencapture4.png">
+               <img src="{% static 'admin/img/screencapture4.png' %}">
                 <h5 class="title">Using Your Card</h5>
                 <p class="exeption">You can use your card to purchase the products you need or to open a secure deposit with lots of benefits.</p>
               </div>
@@ -365,7 +316,7 @@
           <h2>Latest Blog Posts</h2>
           <div class="row row-flex row-40 justify-content-center number-counter text-left wow fadeInUp">
             <div class="col-sm-6 col-lg-3">
-              <article class="post-classic-2"><a class="media-wrapper" href="single-post.html"><img src="images/masonry-blog-1-370x240.jpg" alt="" width="370" height="240"/></a>
+              <article class="post-classic-2"><a class="media-wrapper" href="single-post.html"><img src=" {% static 'admin/img/masonry-blog-1-370x240.jpg' %}" alt="" width="370" height="240"/></a>
                 <div class="post-meta-main">
                   <div class="post-meta-item">
                     <ul class="list-tags">
@@ -384,7 +335,7 @@
               </article>
             </div>
             <div class="col-sm-6 col-lg-3">
-              <article class="post-classic-2"><a class="media-wrapper" href="single-post.html"><img src="images/masonry-blog-3-370x240.jpg" alt="" width="370" height="240"/></a>
+              <article class="post-classic-2"><a class="media-wrapper" href="single-post.html"><img src="{% static 'admin/img/masonry-blog-3-370x240.jpg' %}" alt="" width="370" height="240"/></a>
                 <div class="post-meta-main">
                   <div class="post-meta-item">
                     <ul class="list-tags">
@@ -403,7 +354,7 @@
               </article>
             </div>
             <div class="col-sm-6 col-lg-3">
-              <article class="post-classic-2"><a class="media-wrapper" href="single-post.html"><img src="images/masonry-blog-5-370x240.jpg" alt="" width="370" height="240"/></a>
+              <article class="post-classic-2"><a class="media-wrapper" href="single-post.html"><img src="{% static 'admin/img/masonry-blog-5-370x240.jpg' %}" alt="" width="370" height="240"/></a>
                 <div class="post-meta-main">
                   <div class="post-meta-item">
                     <ul class="list-tags">
@@ -422,7 +373,7 @@
               </article>
             </div>
             <div class="col-sm-6 col-lg-3">
-              <article class="post-classic-2"><a class="media-wrapper" href="single-post.html"><img src="images/masonry-blog-2-370x240.jpg" alt="" width="370" height="240"/></a>
+              <article class="post-classic-2"><a class="media-wrapper" href="single-post.html"><img src="{% static 'admin/img/masonry-blog-2-370x240.jpg' %}" alt="" width="370" height="240"/></a>
                 <div class="post-meta-main">
                   <div class="post-meta-item">
                     <ul class="list-tags">
@@ -451,7 +402,7 @@
           <div class="row no-gutters justify-content-center">
             <div class="col-md-4">
               <div class="price-box-1">
-                <div class="media-wrap"><img src="images/pricing-1-202x162.png" alt="" width="202" height="162"/>
+                <div class="media-wrap"><img src="{% static 'admin/img/pricing-1-202x162.png' %}" alt="" width="202" height="162"/>
                 </div>
                 <div class="title">Basic</div>
                 <p class="exeption">This option is perfect if you have no experience in online banking but would like to have a card for all kinds of payments in selected currencies.</p>
@@ -460,7 +411,7 @@
             </div>
             <div class="col-md-4">
               <div class="price-box-1 price-box-1-primary">
-                <div class="media-wrap"><img src="images/pricing-2-202x162.png" alt="" width="202" height="162"/>
+                <div class="media-wrap"><img src=" {% static 'admin/img/pricing-2-202x162.png' %}" alt="" width="202" height="162"/>
                 </div>
                 <div class="title">Standard</div>
                 <p class="exeption">This offer provides you with extended support for your financial needs and is able to cover the needs of individual and business clients.</p>
@@ -469,7 +420,7 @@
             </div>
             <div class="col-md-4">
               <div class="price-box-1">
-                <div class="media-wrap"><img src="images/pricing-3-202x162.png" alt="" width="202" height="162"/>
+                <div class="media-wrap"><img src="{% static 'admin/img/pricing-3-202x162.png' %}" alt="" width="202" height="162"/>
                 </div>
                 <div class="title">Premium</div>
                 <p class="exeption">This card from Prosperity proved to be a great financial solution for big companies and international enterprises worldwide.</p>
@@ -479,82 +430,4 @@
           </div>
         </div>
       </section>
-      <!-- Page Footer-->
-      <footer class="section footer-2">
-        <div class="container">
-          <div class="row row-40">
-            <div class="col-md-6 col-lg-3"><a class="footer-logo" href="index.html"><img src="images/logo-200x45.png" alt="" width="200" height="45"/></a>
-              <p>Prosperity is the leading financial establishment providing high-quality international banking services. We are always ready to partner with you by offering full financial support to individuals and companies worldwide.</p>
-            </div>
-            <div class="col-md-6 col-lg-3">
-              <h5 class="title">Contact Information</h5>
-              <ul class="contact-box">
-                <li>
-                  <div class="unit unit-horizontal unit-spacing-xxs">
-                    <div class="unit-left"><i class="fa fa-map-marker"></i></div>
-                    <div class="unit-body"><a href="#">2130 Fulton Street, <br class="veil reveal-lg-inline">San Diego, CA 94117-1080 USA</a></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="unit unit-horizontal unit-spacing-xxs">
-                    <div class="unit-left"><i class="fa fa-phone"></i></div>
-                    <div class="unit-body">
-                      <ul class="list-phones">
-                        <li><a href="tel:#">1-800-1234-567</a></li>
-                        <li><a href="tel:#">1-800-1234-567</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="unit unit-horizontal unit-spacing-xxs">
-                    <div class="unit-left"><i class="fa fa-envelope"></i></div>
-                    <div class="unit-body"><a href="mailto:#">info@demolink.org</a></div>
-                  </div>
-                </li>
-              </ul>
-              <div class="group-md group-middle social-items"><a href="#"><i class="fa fa-facebook-f"></i> </a><a href="#"> <i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a><a href="#"><i class='fa fa-comment'></i></a><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-snapchat"></i></a></div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-              <h5 class="title">Gallery</h5>
-              <ul class="instafeed instagram-gallery" data-lightgallery="group">
-                <li><img src="images/insta-gallery-1-72x72.jpg" alt="" width="72" height="72"/>
-                </li>
-                <li><img src="images/insta-gallery-2-72x72.jpg" alt="" width="72" height="72"/>
-                </li>
-                <li><img src="images/insta-gallery-3-72x72.jpg" alt="" width="72" height="72"/>
-                </li>
-                <li><img src="images/insta-gallery-4-72x72.jpg" alt="" width="72" height="72"/>
-                </li>
-                <li><img src="images/insta-gallery-5-72x72.jpg" alt="" width="72" height="72"/>
-                </li>
-                <li><img src="images/insta-gallery-6-72x72.jpg" alt="" width="72" height="72"/>
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-6 col-lg-3">
-              <h5 class="title">Newsletter</h5>
-              <p>Keep up with our always upcoming news and updates. Enter your e-mail and subscribe to our newsletter.</p>
-              <!-- RD Mailform-->
-              <form class="rd-form form-sm rd-mailform" data-form-output="form-output-global" data-form-type="contact" method="post" action="bat/rd-mailform.php">
-                <div class="form-wrap">
-                  <input class="form-input" id="newsletter-email" type="email" name="email" placeholder="Enter Your e-mail"  data-constraints="@Email @Required">
-                  
-                </div>
-                <button class="button button-primary" type="submit">Subscribe</button>
-              </form>
-            </div>
-          </div>
-          <!-- Rights-->
-          <p class="rights"><span>&copy;&nbsp; </span><span class="copyright-year"></span><span>&nbsp;</span><span>All rights reserved</span><span>.&nbsp;</span><a href="privacy-policy.html">Privacy Policy</a></p>
-        </div>
-      </footer>
-    </div>
-    <!-- PANEL-->
-   
-    <!-- Javascript-->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	
-</html>
+      {% include 'base/footer.html' %}
