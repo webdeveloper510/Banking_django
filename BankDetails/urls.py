@@ -41,6 +41,7 @@ from .views import (
 
 urlpatterns = [
     # path('balance/',BankBalance,name='balance'),
+    path("", index_request, name=""),
     path("localbank_Register/", localbank_register_request, name="localbank_Register"),
     path("localbank/", local_register, name="localbank"),
     path("Foreignbank/", foreign_register, name="Foreignbank"),
@@ -66,7 +67,6 @@ urlpatterns = [
         show_foreign_transaction,
         name="show_foreign_transaction",
     ),
-    path("index/", index_request, name="index"),
     path("about/", about_request, name="about"),
     path("services/", services_request, name="services"),
     path("contact_us/", contact_request, name="contact_us"),

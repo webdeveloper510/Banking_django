@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-wp@-zo4#+$$73_!86=+*aiscm()l@7geumhtigr1mf_c*89^)y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.14.249.247']
+ALLOWED_HOSTS = []
 
 
 try:
@@ -91,9 +91,9 @@ WSGI_APPLICATION = 'Finance_Proj.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dbbank1',
+        'NAME': 'dbbank',
         'USER': 'root', 
-        'PASSWORD': 'Testing#123',
+        'PASSWORD': '',
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
         

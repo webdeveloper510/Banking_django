@@ -18,14 +18,17 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,900;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
   <div class="container">
     <nav class="navbar navbar-expand-lg ">
-      <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'admin/img/logo-200x45.png' %}"></a>
+      <a class="navbar-brand" href="{% url '' %}" style="font-family: 'Playfair Display', serif;    font-size: 24px;
+      font-weight: 600;">Bank Financial</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -34,11 +37,9 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto mr-5">
           <li class="nav-item active">
-            <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{% url '' %}">Home <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'about' %}">About</a>
-          </li>
+          
           <li class="nav-item ">
             {% if request.session.Type == 'Local' %}
               <a class="nav-link" href="{% url 'show_transaction' %}"> Transactions</a>
@@ -52,10 +53,7 @@
             <a class="nav-link " href="{% url 'clients' %}">Show Clients</a>
           </li>
           {% endif %}
-          <li class="nav-item">
-            <a class="nav-link " href="{% url 'blog' %}">Blog</a>
-          </li>
-    
+
           {% if request.session.Type == '' or request.session.Type is None %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -84,7 +82,7 @@
           </li>
           {% endif %}
           <li class="nav-item">
-            <a class="nav-link " href="{% url 'contact_us' %}">Contacts</a>
+            <a class="nav-link " href="#">Contacts</a>
           </li>
           {% if request.session.Type != '' and request.session.Type is not None %}
           <li class="nav-item">
@@ -96,3 +94,12 @@
       </div>
     </nav>
   </div>
+  <style>
+    nav.navbar.navbar-expand-lg {
+    position: absolute;
+    top: 10px;
+    z-index: 2;
+    width: 87%;
+	max-width: 1200px !important;
+}
+  </style>

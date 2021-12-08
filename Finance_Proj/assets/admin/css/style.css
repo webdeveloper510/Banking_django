@@ -4356,11 +4356,7 @@ blockquote .position {
 	}
 }
 
-.footer-2 {
-	padding: 40px 0;
-	background: #005db7;
-	color: #aeb1be;
-}
+
 
 .footer-2 .title {
 	color: #ffffff;
@@ -4410,11 +4406,7 @@ blockquote .position {
 	margin-top: 12px;
 }
 
-@media (min-width: 992px) {
-	.footer-2 {
-		padding: 60px 0;
-	}
-}
+
 
 @media (min-width: 1600px) {
 	.footer-2 {
@@ -14489,6 +14481,7 @@ nav.navbar.navbar-expand-lg {
     top: 10px;
     z-index: 2;
     width: 87%;
+	max-width: 1200px !important;
 }
 .carousel-item img {
     height: 100vh !important;

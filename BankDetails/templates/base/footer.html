@@ -1,76 +1,27 @@
 {% load static %}
 
 <!-- Page Footer-->
-    <footer class="section footer-2">
+    <footer class="section footer">
         <div class="container">
-          <div class="row row-40">
-            <div class="col-md-6 col-lg-3"><a class="footer-logo" href="index.html"><img src="{% static 'admin/img/logo-200x45.png' %}" alt="" width="200" height="45"/></a>
-              <p>Prosperity is the leading financial establishment providing high-quality international banking services. We are always ready to partner with you by offering full financial support to individuals and companies worldwide.</p>
-            </div>
-            <div class="col-md-6 col-lg-3">
-              <h5 class="title">Contact Information</h5>
-              <ul class="contact-box">
-                <li>
-                  <div class="unit unit-horizontal unit-spacing-xxs">
-                    <div class="unit-left"><i class="fa fa-map-marker"></i></div>
-                    <div class="unit-body"><a href="#">2130 Fulton Street, <br class="veil reveal-lg-inline">San Diego, CA 94117-1080 USA</a></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="unit unit-horizontal unit-spacing-xxs">
-                    <div class="unit-left"><i class="fa fa-phone"></i></div>
-                    <div class="unit-body">
-                      <ul class="list-phones">
-                        <li><a href="tel:#">1-800-1234-567</a></li>
-                        <li><a href="tel:#">1-800-1234-567</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="unit unit-horizontal unit-spacing-xxs">
-                    <div class="unit-left"><i class="fa fa-envelope"></i></div>
-                    <div class="unit-body"><a href="mailto:#">info@demolink.org</a></div>
-                  </div>
-                </li>
-              </ul>
-              <div class="group-md group-middle social-items"><a href="#"><i class="fa fa-facebook-f"></i> </a><a href="#"> <i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a><a href="#"><i class='fa fa-comment'></i></a><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-snapchat"></i></a></div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-              <h5 class="title">Gallery</h5>
-              <ul class="instafeed instagram-gallery" data-lightgallery="group">
-                <li><img src="{% static 'admin/img/insta-gallery-1-72x72.jpg' %}" alt="" width="72" height="72"/>
-                </li>
-                <li><img src="{% static 'admin/img/insta-gallery-2-72x72.jpg' %}" alt="" width="72" height="72"/>
-                </li>
-                <li><img src="{% static 'admin/img/insta-gallery-3-72x72.jpg' %}" alt="" width="72" height="72"/>
-                </li>
-                <li><img src="{% static 'admin/img/insta-gallery-4-72x72.jpg' %}" alt="" width="72" height="72"/>
-                </li>
-                <li><img src="{% static 'admin/img/insta-gallery-5-72x72.jpg' %}" alt="" width="72" height="72"/>
-                </li>
-                <li><img src="{% static 'admin/img/insta-gallery-6-72x72.jpg' %}" alt="" width="72" height="72"/>
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-6 col-lg-3">
-              <h5 class="title">Newsletter</h5>
-              <p>Keep up with our always upcoming news and updates. Enter your e-mail and subscribe to our newsletter.</p>
-              <!-- RD Mailform-->
-              <form class="rd-form form-sm rd-mailform" data-form-output="form-output-global" data-form-type="contact" method="post" action="bat/rd-mailform.php">
-                <div class="form-wrap">
-                  <input class="form-input" id="newsletter-email" type="email" name="email" placeholder="Enter Your e-mail"  data-constraints="@Email @Required">
-                  
-                </div>
-                <button class="button button-primary" type="submit">Subscribe</button>
-              </form>
-            </div>
-          </div>
-          <!-- Rights-->
+        
           <p class="rights"><span>&copy;&nbsp; </span><span class="copyright-year"></span><span>&nbsp;</span><span>All rights reserved</span><span>.&nbsp;</span><a href="privacy-policy.html">Privacy Policy</a></p>
         </div>
       </footer>
     </div>
+    <style>
+      .footer {
+	background: #005db7 !important;
+	padding-top: 30px;
+  padding-bottom: 20px;
+    color: #aeb1be !important;
+}
+.rights {
+    color: #fff !important;
+}
+.rights a{
+    color: #fff !important;
+}
+    </style>
     <!-- PANEL-->
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
