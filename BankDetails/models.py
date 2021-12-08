@@ -6,15 +6,7 @@ from django.utils import timezone
 # # Create your models here.
 
 
-class UserProfile(models.Model):
-    # USERNAME_FIELD = 'username'
-    name = models.CharField(max_length=200, default="")
-    address = models.CharField(max_length=200, default="")
-    accountnumber = models.CharField(max_length=10, default="")
 
-    def __str__(self):
-
-        return self.name
 
 
 class ForeignBank(models.Model):
@@ -49,6 +41,18 @@ STATUS_CHOICES = (
 )
 
 
+class UserProfile(models.Model):
+    # USERNAME_FIELD = 'username'
+    name = models.CharField(max_length=200, default="")
+    address = models.CharField(max_length=200, default="")
+    accountnumber = models.CharField(max_length=10, default="")
+    bankId = models.ForeignKey(LocalBank, on_delete=models.CASCADE,max_length=10, default="")
+
+    def __str__(self):
+
+        return self.name
+
+
 class Transaction(models.Model):
     Name = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, null=False, blank=True
@@ -75,9 +79,9 @@ class Transaction(models.Model):
         default="",
     )
 
-    date = models.DateField()
-    confirmdate = models.DateField(default='')
-    completeddate = models.DateField(default='')
+    date = models.CharField(max_length=200)
+    confirmdate = models.CharField(max_length=200)
+    completeddate = models.CharField(max_length=200)
 
 
 class UserBalance(models.Model):

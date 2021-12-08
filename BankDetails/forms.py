@@ -33,7 +33,7 @@ class ForiegnBankForm(ModelForm):
 class ClientForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = "__all__"
+        fields = ["name", "address", "accountnumber"]
 
 
 class EditClientForm(forms.Form):

@@ -39,31 +39,37 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'about' %}">About</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              Transaction
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="nav-link" href="{% url 'show_transaction' %}">Local Transaction</a>
-              <a class="nav-link " href="{% url 'show_foreign_transaction' %}"> Foreign Transaction</a>
-            </div>
+          <li class="nav-item ">
+            {% if request.session.Type == 'Local' %}
+              <a class="nav-link" href="{% url 'show_transaction' %}"> Transactions</a>
+              {% endif %}
+              {% if request.session.Type == 'Foreign' %}
+              <a class="nav-link " href="{% url 'show_foreign_transaction' %}"> Transactions</a>
+              {% endif %}
           </li>
-
+          {% if request.session.Type == 'Local' %}
           <li class="nav-item">
             <a class="nav-link " href="{% url 'clients' %}">Show Clients</a>
           </li>
+          {% endif %}
           <li class="nav-item">
             <a class="nav-link " href="{% url 'blog' %}">Blog</a>
           </li>
+    
+          {% if request.session.Type == '' or request.session.Type is None %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
               Login
             </a>
+
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="nav-link" href="{% url 'local_login' %}">Local login</a>
-              <a class="nav-link " href="{% url 'foreign' %}"> Foreign Login</a>
+              {% if request.session.LocalbankID == '' or request.session.Type is None %}
+              <a class="nav-link" href="{% url 'local_login' %}">Local Bank login</a>
+              {% endif %}
+              {% if request.session.ForeignbankID == ''  or request.session.Type is None %}
+              <a class="nav-link " href="{% url 'foreign' %}"> Foreign Bank Login</a>
+              {% endif %}
             </div>
           </li>
           <li class="nav-item dropdown">
@@ -72,14 +78,19 @@
               Register
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="nav-link " href="{% url 'localbank' %}"> Local Register</a>
-              <a class="nav-link " href="{% url 'Register_ForeignBank' %}"> Foreign Register</a>
+              <a class="nav-link " href="{% url 'localbank' %}"> Local Bank Register</a>
+              <a class="nav-link " href="{% url 'Register_ForeignBank' %}"> Foreign Bank Register</a>
             </div>
           </li>
-
+          {% endif %}
           <li class="nav-item">
             <a class="nav-link " href="{% url 'contact_us' %}">Contacts</a>
           </li>
+          {% if request.session.Type != '' and request.session.Type is not None %}
+          <li class="nav-item">
+            <a class="nav-link " href="{% url 'logout' %}">Logout</a>
+          </li>
+          {% endif %}
         </ul>
 
       </div>

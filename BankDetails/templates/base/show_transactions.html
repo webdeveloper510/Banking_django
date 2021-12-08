@@ -63,6 +63,7 @@
               <th>Status</th>
               <th>Amount</th>
               <th>ForienBank Routing Number</th>
+              <th>Date</th>
             </tr>
           </thead>
           <tbody>
@@ -74,6 +75,7 @@
               <td>{{data.status}}</td>
               <td>{{data.amount}}</td>
               <td>{{data.ForiegnBankrountingnumber_id}}</td>
+              <td>{{data.date}}</td>
             </tr>
             {% endfor %}
 
@@ -105,6 +107,7 @@
               <th>Status</th>
               <th>Amount</th>
               <th>ForienBank Routing Number</th>
+              <th>Date</th>
             </tr>
           </thead>
           <tbody>
@@ -117,6 +120,7 @@
               <td>{{data.status}}</td>
               <td>{{data.amount}}</td>
               <td>{{data.ForiegnBankrountingnumber_id}}</td>
+              <td>{{data.confirmdate}}</td>
               <td><button data-url="{% url 'confirm_status' data.id %}" id="complete"
                   class="btn btn-success updateStatus" data-status="complete">Complete</button>
               </td>
@@ -155,6 +159,7 @@
               <th>Status</th>
               <th>Amount</th>
               <th>ForienBank Routing Number</th>
+              <th>Date</th>
             </tr>
           </thead>
           <tbody>
@@ -167,6 +172,7 @@
               <td>{{data.status}}</td>
               <td>{{data.amount}}</td>
               <td>{{data.ForiegnBankrountingnumber_id}}</td>
+              <td>{{data.completeddate}}</td>
             </tr>
             </tr>
             {% endfor %}

@@ -35,6 +35,7 @@ from .views import (
     single_request,
     foreign_login,
     date_request,
+    logout_request,
 )
 
 
@@ -74,4 +75,5 @@ urlpatterns = [
     path("single-post/", single_request, name="single-post"),
     path("footer/", footer_request, name="footer"),
     path("date/",date_request,name="date"),
+    path('logout/',logout_request,name="logout"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

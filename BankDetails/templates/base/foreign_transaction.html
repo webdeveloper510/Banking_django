@@ -23,18 +23,18 @@
     <div class="text-center mt-5">
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="    display: flex;
         justify-content: center;">
-            <li class="nav-item">
-                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
-                    aria-controls="pills-home" aria-selected="true">Pending</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab"
-                    aria-controls="pills-profile" aria-selected="false">Confirm</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab"
-                    aria-controls="pills-contact" aria-selected="false">Complete</a>
-            </li>
+          <li onclick="setTab('pending');" class="nav-item">
+            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
+              aria-controls="pills-home" aria-selected="true">Pending</a>
+          </li>
+          <li onclick="setTab('confirm');" class="nav-item">
+            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab"
+              aria-controls="pills-profile" aria-selected="false">Confirm</a>
+          </li>
+          <li onclick="setTab('complete');" class="nav-item">
+            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab"
+              aria-controls="pills-contact" aria-selected="false">Completed</a>
+          </li>
         </ul>
     </div>
     <div class="tab-content my-3" id="pills-tabContent">
@@ -167,6 +167,16 @@
 
 </div>
 <!-- PANEL-->
+<script>
+    var typeTab = 'pending';
+  
+    function setTab(type) {
+      typeTab = type;
+  
+    }
+  </script>
+
+
 <script>
     $(document).ready(function () {
         $('#Pending').DataTable();

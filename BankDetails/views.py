@@ -38,6 +38,8 @@ from django.utils import formats
 import datetime
 from django.core.mail import send_mail
 from django.conf import settings
+from datetime import datetime
+import time
 
 # Create your views here.
 
@@ -107,6 +109,7 @@ def login_page(request):
         user = LocalBank.objects.get(username=username, password=password)
         print(user)
         request.session["localbankid"] = user.id
+        request.session["Type"] = "Local"
         if username == user.username:
             messages.success(request, "Login successfull.")
             return JsonResponse({"instance": "user uploggeddated"})
@@ -122,7 +125,8 @@ def foreign_login_page(request):
         user = ForeignBank.objects.get(username=username)
         password = ForeignBank.objects.get(password=password)
         print(password)
-        request.session["localbankid"] = user.id
+        request.session["forienid"] = user.id
+        request.session["Type"] = "Foreign"
         if username == user.username:
             messages.success(request, "Login successfull.")
             return JsonResponse({"instance": "user uploggeddated"})
@@ -144,21 +148,34 @@ def add_client_request(request):
 def add_client(request):
 
     clients = None
+  
     localbankid = request.session.get("localbankid")
-    localbankId = LocalBank.objects.get(id=localbankid)
+    localbank = user = LocalBank.objects.get(id=localbankid)
+    localbankInstance  = LocalBank.objects.filter(name=localbank)
+    print(str(localbankInstance))
 
     try:
         form = None
         if request.is_ajax and request.method == "POST":
             mydict = dict(zip(request.POST.keys(), request.POST.values()))
             del mydict["csrfmiddlewaretoken"]
-            clients = UserProfile(**mydict)
-            instance = clients.save()
+            data_dict_user_profile = {
+                "bankId": localbank,
+                "address":request.POST["address"],
+                "accountnumber":request.POST["accountnumber"],
+                "name": request.POST["name"]
+               
+            }
+            #mydict["bankId"]  = localbankInstance,
+            clients = UserProfile.objects.create(**data_dict_user_profile)
+            #instance = clients.save()
             clientid = UserProfile.objects.latest("id")
+         
             data_dict = {
                 "AccountNumber": request.POST["accountnumber"],
-                "BankID": localbankId,
-                "UserId": clientid,
+                
+                "UserId": clientid
+               
             }
             instance = UserBalance.objects.create(**data_dict)
             return JsonResponse({"instance": "instance"})
@@ -169,7 +186,9 @@ def add_client(request):
 
 
 def show_clients(request):
-    clients_record = UserProfile.objects.all().values()
+    localid = request.session.get('localbankid')
+ 
+    clients_record = UserProfile.objects.filter(bankId=localid).values()
     context = {"clients_data": clients_record}
     return render(request, "base/showclients.html", context)
 
@@ -207,8 +226,10 @@ def transaction(request):
 
 
 def make_transaction_request(request):
-    dt = datetime.datetime.now()
-    print(dt)
+    # dt = datetime.datetime.now()
+    date = time.strftime("%Y-%m-%d")
+    # date = strftime('%Y%M%d')
+
     localbankid = request.session.get("localbankid")
     localbank = LocalBank.objects.get(id=localbankid)
     print(localbankid)
@@ -227,18 +248,19 @@ def make_transaction_request(request):
                 "toBank": tobank,
                 "amount": request.POST["amount"],
                 "ForiegnBankrountingnumber": tobank,
-                "date":dt
+                "date": str(date),
             }
+            print(settings.EMAIL_HOST_USER)
             instance = Transaction.objects.create(**data_dict)
-            subject = "Please confirm status"
-            msg = "Congratulations for your success"
-            to = "saurav@codenomad.net"
-            res = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])
-            if res == 1:
-                msg = "Mail Sent Successfuly"
-            else:
-                msg = "Mail could not sent"
-            return HttpResponse(msg)
+            # subject = "Please confirm status"
+            # msg = "Congratulations for your success"
+            # to = "saurav@codenomad.net"
+            # res = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])
+            # if res == 1:
+            #     msg = "Mail Sent Successfuly"
+            # else:
+            #     msg = "Mail could not sent"
+            # return HttpResponse(msg)
             return JsonResponse({"instance": "instance"})
 
     except Exception as e:
@@ -249,25 +271,37 @@ def show_transanctions(request):
     context = None
     dateInSession = request.session.get("datevalue")
     typeInSession = request.session.get("typeTab")
+    LocalbankID = request.session.get("localbankid")
+
+    print(dateInSession)
+    print("typeInSession" + str(typeInSession))
+    print("ForeignbankID" + str(LocalbankID))
 
     if dateInSession and typeInSession == "pending":
         transaction_pending = Transaction.objects.filter(
             status="pending", date=dateInSession
         ).values()
     else:
-        transaction_pending = Transaction.objects.filter(status="pending").values()
+        transaction_pending = Transaction.objects.filter(
+            FromBank_id=LocalbankID, status="pending"
+        ).values()
     if dateInSession and typeInSession == "confirm":
         transaction_confirm = Transaction.objects.filter(
             status="confirmed", confirmdate=dateInSession
         ).values()
     else:
-        transaction_confirm = Transaction.objects.filter(status="confirmed").values()
+        transaction_confirm = Transaction.objects.filter(
+            FromBank_id=LocalbankID, status="confirmed"
+        ).values()
     if dateInSession and typeInSession == "complete":
         transaction_completed = Transaction.objects.filter(
             status="complete", completeddate=dateInSession
         ).values()
     else:
-        transaction_completed = Transaction.objects.filter(status="complete").values()
+        transaction_completed = Transaction.objects.filter(
+            FromBank_id=LocalbankID, status="complete"
+        ).values()
+    request.session["datevalue"] = None
     context = {
         "Transaction_pending": transaction_pending,
         "Transaction_confirm": transaction_confirm,
@@ -280,12 +314,39 @@ def show_transanctions(request):
 def show_foreign_transaction(request):
 
     context = None
+    dateInSession = request.session.get("datevalue")
+    typeInSession = request.session.get("typeTab")
+    ForeignbankID = request.session.get("forienid")
 
-    transaction_pending = Transaction.objects.filter(status="pending").values()
-    # return HttpResponse(transaction_pending)
-    transaction_confirm = Transaction.objects.filter(status="confirmed").values()
-    transaction_completed = Transaction.objects.filter(status="complete").values()
+    print(dateInSession)
+    print("typeInSession" + str(typeInSession))
+    print("ForeignbankID" + str(ForeignbankID))
 
+    if dateInSession and typeInSession == "pending":
+        transaction_pending = Transaction.objects.filter(
+            status="pending", date=dateInSession
+        ).values()
+    else:
+        transaction_pending = Transaction.objects.filter(
+            toBank_id=ForeignbankID, status="pending"
+        ).values()
+    if dateInSession and typeInSession == "confirm":
+        transaction_confirm = Transaction.objects.filter(
+            status="confirmed", confirmdate=dateInSession
+        ).values()
+    else:
+        transaction_confirm = Transaction.objects.filter(
+            toBank_id=ForeignbankID, status="confirmed"
+        ).values()
+    if dateInSession and typeInSession == "complete":
+        transaction_completed = Transaction.objects.filter(
+            status="complete", completeddate=dateInSession
+        ).values()
+    else:
+        transaction_completed = Transaction.objects.filter(
+            toBank_id=ForeignbankID, status="complete"
+        ).values()
+    request.session["datevalue"] = None
     context = {
         "Transaction_pending": transaction_pending,
         "Transaction_confirm": transaction_confirm,
@@ -358,7 +419,19 @@ def contact_request(request):
 
 
 def header_request(request):
-    return render(request, "base/header.html")
+    print('hgere')
+    LocalbankID = request.session.get("localbankid")
+    ForeignbankID = request.session.get("forienid")
+    Type = request.session.get("Type")
+    print(Type)
+    return render(request, "base/header.html",LocalbankID,ForeignbankID,Type)
+
+
+def logout_request(request):
+    request.session['Type'] = ''
+    request.session['LocalbankID'] = ''
+    request.session['ForeignbankID'] = ''
+    return redirect('index')
 
 
 def footer_request(request):
