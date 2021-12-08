@@ -431,7 +431,7 @@ def logout_request(request):
     request.session['Type'] = ''
     request.session['LocalbankID'] = ''
     request.session['ForeignbankID'] = ''
-    return redirect('index')
+    return redirect('')
 
 
 def footer_request(request):

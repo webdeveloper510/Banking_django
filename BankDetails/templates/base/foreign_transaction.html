@@ -43,8 +43,14 @@
             <div class="row">
                 <div class="col"></div>
                 <div class="col-md-3 mb-3">
-                    <label>Date :</label>
-                    <input type="date" class="form-control" id="datepicker">
+                    <form id="dateform" method="post">
+                        {% csrf_token %}
+                        <label>Date :</label>
+                        <input type="date" name="date" class="form-control date" id="datepicker">
+                        <div class="text-right mt-3">
+                        <button dataa-url="{% url 'date' %}" class="submit_btn text-right btn btn-primary">Apply</button>
+                        </div>
+                      </form>
                 </div>
             </div>
 
@@ -84,8 +90,14 @@
             <div class="row">
                 <div class="col"></div>
                 <div class="col-md-3 mb-3">
-                    <label>Date :</label>
-                    <input type="date" class="form-control" id="datepicker">
+                    <form id="dateform" method="post">
+                        {% csrf_token %}
+                        <label>Date :</label>
+                        <input type="date" name="date" class="form-control date" id="datepicker">
+                        <div class="text-right mt-3">
+                        <button dataa-url="{% url 'date' %}" class="submit_btn text-right btn btn-primary">Apply</button>
+                        </div>
+                      </form>
                 </div>
             </div>
             <div class="card p-3">
@@ -121,8 +133,14 @@
             <div class="row">
                 <div class="col"></div>
                 <div class="col-md-3 mb-3">
-                    <label>Date :</label>
-                    <input type="date" class="form-control" id="datepicker">
+                    <form id="dateform" method="post">
+                        {% csrf_token %}
+                        <label>Date :</label>
+                        <input type="date" name="date" class="form-control date" id="datepicker">
+                        <div class="text-right mt-3">
+                        <button dataa-url="{% url 'date' %}" class="submit_btn text-right btn btn-primary">Apply</button>
+                        </div>
+                      </form>
                 </div>
             </div>
             <div class="card p-3">
