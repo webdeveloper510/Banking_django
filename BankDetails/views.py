@@ -374,13 +374,21 @@ def get_transaction_status(request):
 
 
 def confirm_status(request, pk):
-    now = datetime.datetime.now()
+    #now = datetime.datetime.now()
+    date = time.strftime("%Y-%m-%d")
     if request.is_ajax and request.method == "POST":
         mydict = dict(zip(request.POST.keys(), request.POST.values()))
         status_update = str(mydict["status"])
-        instance = Transaction.objects.filter(pk=pk).update(
-            status=status_update, date=now
-        )
+        print(status_update)
+        instance = None
+        if status_update=='confirmed':
+            instance = Transaction.objects.filter(pk=pk).update(
+            status=status_update, confirmdate=date
+            )   
+        elif status_update=='complete':
+            instance = Transaction.objects.filter(pk=pk).update(
+            status=status_update, completeddate=date
+            ) 
         return JsonResponse({"instance": "instance"})
         messages.success(request, "Status Has Been  Confirmed successfully.")
 

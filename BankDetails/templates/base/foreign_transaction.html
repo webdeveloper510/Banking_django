@@ -66,6 +66,7 @@
                             <th>Status</th>
                             <th>Amount</th>
                             <th>ForienBank Routing Number</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -208,13 +209,13 @@
     });
 </script>
 
-{% include 'base/footer.html' %}
+
 
 
 <script>
     $(".updateStatus").click(function () {
         var status = $(this).attr('data-status');
-        console.log(status)
+        console.log(status);
         var url = $(this).attr('data-url');
         $.ajax({
             type: "POST",
@@ -235,3 +236,4 @@
 
     })
 </script>
+{% include 'base/footer.html' %}
