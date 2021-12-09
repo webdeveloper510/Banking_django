@@ -17,6 +17,7 @@ class LocalBankForm(ModelForm):
             "Accountnumber",
             "rountingnumber",
             "username",
+            "email",
             "password",
         ]
 
@@ -27,7 +28,7 @@ class ForiegnBankForm(ModelForm):
         widgets = {
             "password": forms.PasswordInput(),
         }
-        fields = ["name", "address", "rountingnumber", "username", "password"]
+        fields = ["name", "address", "rountingnumber", "username","email", "password"]
 
 
 class ClientForm(forms.ModelForm):

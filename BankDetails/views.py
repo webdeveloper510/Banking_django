@@ -40,7 +40,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from datetime import datetime
 import time
-
+import smtplib
+import ssl
 # Create your views here.
 
 
@@ -106,11 +107,12 @@ def login_page(request):
 
         username = request.POST["username"]
         password = request.POST["password"]
-        user = LocalBank.objects.get(username=username, password=password)
-        print(user)
-        request.session["localbankid"] = user.id
+        user = LocalBank.objects.filter(username=username, password=password).values('id','username')
+      
+        
+        request.session["localbankid"] = user[0]['id']
         request.session["Type"] = "Local"
-        if username == user.username:
+        if username == user[0]['username']:
             messages.success(request, "Login successfull.")
             return JsonResponse({"instance": "user uploggeddated"})
         else:
@@ -122,9 +124,9 @@ def foreign_login_page(request):
 
         username = request.POST["username"]
         password = request.POST["password"]
-        user = ForeignBank.objects.get(username=username)
-        password = ForeignBank.objects.get(password=password)
-        print(password)
+        user = ForeignBank.objects.get(username=username,password=password)
+        
+        
         request.session["forienid"] = user.id
         request.session["Type"] = "Foreign"
         if username == user.username:
@@ -148,10 +150,10 @@ def add_client_request(request):
 def add_client(request):
 
     clients = None
-  
+
     localbankid = request.session.get("localbankid")
     localbank = user = LocalBank.objects.get(id=localbankid)
-    localbankInstance  = LocalBank.objects.filter(name=localbank)
+    localbankInstance = LocalBank.objects.filter(name=localbank)
     print(str(localbankInstance))
 
     try:
@@ -161,21 +163,18 @@ def add_client(request):
             del mydict["csrfmiddlewaretoken"]
             data_dict_user_profile = {
                 "bankId": localbank,
-                "address":request.POST["address"],
-                "accountnumber":request.POST["accountnumber"],
-                "name": request.POST["name"]
-               
+                "address": request.POST["address"],
+                "accountnumber": request.POST["accountnumber"],
+                "name": request.POST["name"],
             }
-            #mydict["bankId"]  = localbankInstance,
+            # mydict["bankId"]  = localbankInstance,
             clients = UserProfile.objects.create(**data_dict_user_profile)
-            #instance = clients.save()
+            # instance = clients.save()
             clientid = UserProfile.objects.latest("id")
-         
+
             data_dict = {
                 "AccountNumber": request.POST["accountnumber"],
-                
-                "UserId": clientid
-               
+                "UserId": clientid,
             }
             instance = UserBalance.objects.create(**data_dict)
             return JsonResponse({"instance": "instance"})
@@ -186,8 +185,8 @@ def add_client(request):
 
 
 def show_clients(request):
-    localid = request.session.get('localbankid')
- 
+    localid = request.session.get("localbankid")
+
     clients_record = UserProfile.objects.filter(bankId=localid).values()
     context = {"clients_data": clients_record}
     return render(request, "base/showclients.html", context)
@@ -240,6 +239,7 @@ def make_transaction_request(request):
             userid = request.POST["Name"]
             name = UserProfile.objects.get(id=userid)
             tobank = ForeignBank.objects.get(id=request.POST["toBank"])
+            print(tobank)
 
             data_dict = {
                 "Accountnumber": request.POST["Accountnumber"],
@@ -250,17 +250,24 @@ def make_transaction_request(request):
                 "ForiegnBankrountingnumber": tobank,
                 "date": str(date),
             }
+
+            Transaction.objects.create(**data_dict)
             print(settings.EMAIL_HOST_USER)
-            instance = Transaction.objects.create(**data_dict)
-            # subject = "Please confirm status"
-            # msg = "Congratulations for your success"
-            # to = "saurav@codenomad.net"
-            # res = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])
-            # if res == 1:
-            #     msg = "Mail Sent Successfuly"
-            # else:
-            #     msg = "Mail could not sent"
-            # return HttpResponse(msg)
+            port = settings.EMAIL_PORT
+            smtp_server = settings.EMAIL_HOST
+            sender_email = settings.EMAIL_HOST_USER
+            password = settings.EMAIL_HOST_PASSWORD
+            receiver_email = 'saurav@codenomad.net'
+            subject = 'Incoming Transaction from '+localbank.name
+            body = 'Please check incoming transaction of amount '+request.POST["amount"] + ' with routing number '+tobank.rountingnumber
+            message = 'Subject: {}\n\n{}'.format(subject, body)
+            context = ssl.create_default_context()
+            with smtplib.SMTP(smtp_server, port) as server:
+                server.ehlo()  # Can be omitted
+                server.starttls(context=context)
+                server.ehlo()  # Can be omitted
+                server.login(sender_email, password)
+                server.sendmail(sender_email, receiver_email, message)
             return JsonResponse({"instance": "instance"})
 
     except Exception as e:
@@ -374,21 +381,20 @@ def get_transaction_status(request):
 
 
 def confirm_status(request, pk):
-    #now = datetime.datetime.now()
+    # now = datetime.datetime.now()
     date = time.strftime("%Y-%m-%d")
     if request.is_ajax and request.method == "POST":
         mydict = dict(zip(request.POST.keys(), request.POST.values()))
         status_update = str(mydict["status"])
-        print(status_update)
         instance = None
-        if status_update=='confirmed':
+        if status_update == "confirmed":
             instance = Transaction.objects.filter(pk=pk).update(
-            status=status_update, confirmdate=date
-            )   
-        elif status_update=='complete':
+                status=status_update, confirmdate=date
+            )
+        elif status_update == "completed":
             instance = Transaction.objects.filter(pk=pk).update(
-            status=status_update, completeddate=date
-            ) 
+                status=status_update, completeddate=date
+            )
         return JsonResponse({"instance": "instance"})
         messages.success(request, "Status Has Been  Confirmed successfully.")
 
@@ -427,19 +433,19 @@ def contact_request(request):
 
 
 def header_request(request):
-    print('hgere')
+    print("hgere")
     LocalbankID = request.session.get("localbankid")
     ForeignbankID = request.session.get("forienid")
     Type = request.session.get("Type")
     print(Type)
-    return render(request, "base/header.html",LocalbankID,ForeignbankID,Type)
+    return render(request, "base/header.html", LocalbankID, ForeignbankID, Type)
 
 
 def logout_request(request):
-    request.session['Type'] = ''
-    request.session['LocalbankID'] = ''
-    request.session['ForeignbankID'] = ''
-    return redirect('')
+    request.session["Type"] = ""
+    request.session["LocalbankID"] = ""
+    request.session["ForeignbankID"] = ""
+    return redirect("")
 
 
 def footer_request(request):

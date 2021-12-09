@@ -16,6 +16,7 @@ class ForeignBank(models.Model):
     password = models.CharField(max_length=200, default="")
     rountingnumber = models.CharField(max_length=9, default="")
     username = models.CharField(max_length=200, default="")
+    email = models.CharField(max_length=200,default='')
 
     def __str__(self):
 
@@ -29,6 +30,7 @@ class LocalBank(models.Model):
     password = models.CharField(max_length=200, default="")
     rountingnumber = models.CharField(max_length=9, default="")
     Accountnumber = models.CharField(max_length=10, default="")
+    email = models.CharField(max_length=200,default='')
 
     def __str__(self):
         return self.name
