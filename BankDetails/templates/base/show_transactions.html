@@ -19,6 +19,8 @@
 
 
 <section class="container">
+  <div style="display: none;" id="divSuccessMsg"  class="alert alert-success mt-5" role="alert"></div>
+  <div style="display: none;" id="divErrorMsg"  class="alert alert-success mt-5" role="alert"></div>
   <div class="text-right mt-3">
     <a href="{% url 'create_transanction' %}" class="btn btn-outline-success">Create Transaction</a>
   </div>
@@ -112,6 +114,7 @@
               <th>Amount</th>
               <th>ForienBank Routing Number</th>
               <th>Date</th>
+              <th>Status/Action</th>
             </tr>
           </thead>
           <tbody>
@@ -166,6 +169,7 @@
               <th>Amount</th>
               <th>ForienBank Routing Number</th>
               <th>Date</th>
+              
             </tr>
           </thead>
           <tbody>
@@ -229,9 +233,17 @@
       }, //only input
       success: function (response) {
         console.log(response);
+        if (response.instance == 'insatnce'){
+          $('#divSuccessMsg').html(" successfull.").show()
         window.setTimeout(function () {
           location.reload();
         }, 1000);
+        }else{
+          $('#divErrorMsg').html('Invalid Crdenetials').show()
+            window.setTimeout(function () {
+              location.reload()
+            }, 2000)
+        }
       }
     });
 
@@ -268,10 +280,16 @@
       }, //only input
       success: function (response) {
         console.log(response);
+        $('#divSuccessMsg').html(" successfull.").show()
         window.setTimeout(function () {
           location.reload();
         }, 1000);
-      }
+      },
+      error: function() {
+            $('#divErrorMsg').html("Something is going wrong...")
+            .show()
+            .fadeIn(1500, function() { $('#divErrorMsg'); });
+          }
     });
 
   })

@@ -60,7 +60,7 @@ def localbank_register_request(request):
             return JsonResponse({"instance": "instance"})
 
     except Exception as e:
-
+        
         return JsonResponse({"error": e}, status=400)
 
 
@@ -85,7 +85,8 @@ def foreign_register(request):
             form = ForeignBank(**myDict)
             instance = form.save()
             return JsonResponse({"instance": "instance"})
-
+        else:
+            return JsonResponse({"instance": "Something went wrong"})
     except Exception as e:
 
         return JsonResponse({"error": e}, status=400)
@@ -104,21 +105,27 @@ def login_local(request):
 
 def login_page(request):
     user = None
-    if request.is_ajax and request.method == "POST":
+    try:
+        if request.is_ajax and request.method == "POST":
 
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = LocalBank.objects.filter(username=username, password=password).values(
-            "id", "username"
-        )
-
-        request.session["localbankid"] = user[0]["id"]
-        request.session["Type"] = "Local"
-        if username == user[0]["username"]:
-            messages.success(request, "Login successfull.")
-            return JsonResponse({"instance": "user uploggeddated"})
+            username = request.POST["username"]
+            password = request.POST["password"]
+            user = LocalBank.objects.filter(username=username, password=password).values(
+                "id", "username"
+            )
+            print(len(user))
+            if len(user)>0:
+                request.session["localbankid"] = user[0]["id"]
+                request.session["Type"] = "Local"
+            else:
+                return JsonResponse({"instance": "Invalid Credentials"})
+            if username == user[0]["username"]:
+                messages.success(request, "Login successfull.")
+                return JsonResponse({"instance": "user uploggeddated"})
         else:
-            messages.error(request, "Invalid Credentials")
+           return JsonResponse({"instance": "Invalid Credentials"})
+    except Exception as e:
+        return JsonResponse({"error": e}, status=400)
 
 
 def foreign_login_page(request):
@@ -126,11 +133,16 @@ def foreign_login_page(request):
 
         username = request.POST["username"]
         password = request.POST["password"]
-        user = ForeignBank.objects.get(username=username, password=password)
+        user = ForeignBank.objects.filter(username=username, password=password).values(
+                "id", "username"
+            )
+        if len(user)>0:
+            request.session["forienid"] = user[0]["id"]
+            request.session["Type"] = "Foreign"
+        else:
+            return JsonResponse({"instance": "Invalid Credentials"})
 
-        request.session["forienid"] = user.id
-        request.session["Type"] = "Foreign"
-        if username == user.username:
+        if username == user[0]["username"]:
             messages.success(request, "Login successfull.")
             return JsonResponse({"instance": "user uploggeddated"})
         else:

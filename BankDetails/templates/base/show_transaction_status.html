@@ -58,6 +58,7 @@
     <!-- Breadcrumbs -->
 
     <section class="container">
+        <div style="display: none;" id="divSuccessMsg"  class="alert alert-success mt-5" role="alert">
         <div class="card my-5 p-3">
             <table id="example" class="table table-striped table-bordered" style="width:100%">
 
@@ -122,6 +123,7 @@
             success: function (response) {
                 console.log(response);
                 window.setTimeout(function () {
+                    $('#divSuccessMsg').html("Status has been updated successfully.").show()
                     window.location.href = "{% url 'transaction_status' %}";
                 }, 1000);
             }

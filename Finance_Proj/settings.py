@@ -151,5 +151,5 @@ MEDIA_ROOT = BASE_DIR / '/media'
 EMAIL_USE_TLS = True  
 EMAIL_HOST = 'smtp.gmail.com'  
 EMAIL_PORT = 587  
-EMAIL_HOST_USER = 'lucky@codenomad.net'  
-EMAIL_HOST_PASSWORD = 'lucky7863'  
+EMAIL_HOST_USER = 'saurav@codenomad.net'  
+EMAIL_HOST_PASSWORD = 'hp22c3255'  

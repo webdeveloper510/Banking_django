@@ -8,16 +8,18 @@
 <section class="section section-bredcrumbs">
     <div class="container context-dark breadcrumb-wrapper">
         <h1>
-         Create  Transaction</h1>
+            Create Transaction</h1>
         <ul class="breadcrumbs-custom">
             <li><a href="index.html">Home</a></li>
             <li class="active">
-                Create  Transaction</li>
+                Create Transaction</li>
         </ul>
     </div>
 </section>
 
 <div class="container">
+    <div style="display: none;" id="divSuccessMsg" class="alert alert-success mt-5" role="alert"></div>
+    <div style="display: none;" id="divErrorMsg" class="alert alert-danger mt-5" role="alert"></div>
     <div class="row">
         <div class="col">
         </div>
@@ -51,9 +53,20 @@
                 data: serializedData, //only input
                 success: function (response) {
                     console.log(response);
-                    window.setTimeout(function () {
-                        window.location.href = "{% url 'show_transaction'%}";
-                    }, 3000);
+                    if (response.instance == 'instance') {
+                        window.setTimeout(function () {
+                            $('#divSuccessMsg').html(
+                                    " Transaction has been created successfully.")
+                                .show()
+                            window.location.href = "{% url 'show_transaction'%}";
+                        }, 3000);
+
+                    } else {
+                        $('#divErrorMsg').html('Invalid Crdenetials').show()
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 2000)
+                    }
 
                 }
             });

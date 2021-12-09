@@ -14,7 +14,6 @@ class LocalBankForm(ModelForm):
         fields = [
             "name",
             "address",
-            "Accountnumber",
             "rountingnumber",
             "username",
             "email",

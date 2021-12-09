@@ -13,6 +13,8 @@
     </div>
   </section>
   <div class="container">
+    <div style="display: none;" id="divSuccessMsg" class="alert alert-success mt-5" role="alert"></div>
+    <div style="display: none;" id="divErrorMsg" class="alert alert-danger mt-5" role="alert"></div>
     <div class="row">
     <div class="col-md"></div>
     <div class="col-md-6 my-5">
@@ -51,11 +53,18 @@
         url: endpoint,
         data: $(this).serialize(), //only input
         success: function (response) {
-          console.log(response);
-          window.setTimeout(function () {
+          console.log(response); 
+          if (response.instance = 'instance'){
+            $('#divSuccessMsg').html(" redirected to the next Portal successfully.").show()
+            window.setTimeout(function () {
             window.location.href = "{% url 'clients' %}";
           }, 1000);
-
+          }else{
+            $('#divErrorMsg').html('Invalid Crdenetials').show()
+            window.setTimeout(function () {
+              location.reload()
+            }, 2000)
+          }
         }
       });
 

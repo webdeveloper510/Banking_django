@@ -29,7 +29,6 @@ class LocalBank(models.Model):
     username = models.CharField(max_length=200, default="")
     password = models.CharField(max_length=200, default="")
     rountingnumber = models.CharField(max_length=9, default="")
-    Accountnumber = models.CharField(max_length=10, default="")
     email = models.CharField(max_length=200,default='')
 
     def __str__(self):

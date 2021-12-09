@@ -1,49 +1,51 @@
 {% include 'base/header.html' %}
 {% load static %}
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-  <section class="section section-bredcrumbs">
-    <div class="container context-dark breadcrumb-wrapper">
-      <h1> Local Login</h1>
-      <ul class="breadcrumbs-custom">
-        <li><a href="index.html">Home</a></li>
-        <li class="active">Local Login</li>
-      </ul>
-    </div>
-  </section>
-  <div class="login">
-    <div class="container">
-      <div class="row">
-        <div class="col"></div>
+<section class="section section-bredcrumbs">
+  <div class="container context-dark breadcrumb-wrapper">
+    <h1> Local Login</h1>
+    <ul class="breadcrumbs-custom">
+      <li><a href="index.html">Home</a></li>
+      <li class="active">Local Login</li>
+    </ul>
+  </div>
+</section>
+<div class="login">
+  <div class="container">
+    <div style="display: none;" id="divsuccess" class="alert alert-success mt-5" role="alert"></div>
+    <div style="display: none;" id="divErrorMsg" class="alert alert-danger mt-5" role="alert"></div>
+    <div class="row">
+      <div class="col"></div>
 
-        <div class="col-md-6 my-5">
-          <div class="card p-4">
-            <div class="text-center my-3">
-              <h3> Local Login</h3>
-            </div>
-            
-            <form id="form" autocomplete="off">
-              {% csrf_token %}
-              <div class="mb-3">
-                <label for="" class="form-label"></label>
-                <input type="text" class="form-control" name="username" id="" Required placeholder="Username">
-                            </div>
-                            <div class=" mb-3">
-                <label for="exampleInputPassword1" class="form-label"></label>
-                <input type="password" class="form-control" name="password" id="" required placeholder="Password">
-              </div>
-              <button type="submit" class="btn btn-primary" id="btnSubmit">Login</button>
-            </form>
+      <div class="col-md-6 my-5">
+        <div class="card p-4">
+          <div class="text-center my-3">
+            <h3> Local Login</h3>
           </div>
-        </div>
-        <div class="col">
 
+          <form id="form" autocomplete="off">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="" class="form-label"></label>
+              <input type="text" class="form-control" name="username" id="" Required placeholder="Username">
+            </div>
+            <div class=" mb-3">
+              <label for="exampleInputPassword1" class="form-label"></label>
+              <input type="password" class="form-control" name="password" id="" required placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary" id="btnSubmit">Login</button>
+          </form>
         </div>
+      </div>
+      <div class="col">
 
       </div>
+
     </div>
   </div>
-  {% include 'base/footer.html' %}
+</div>
+{% include 'base/footer.html' %}
 
 <script>
   $(document).ready(function () {
@@ -60,11 +62,24 @@
         data: $(this).serialize(), //only input
         success: function (response) {
           console.log(response);
-          window.setTimeout(function () {
-            window.location.href = "{% url 'clients'%}";
-          }, 3000);
-
+          if (response.instance == 'user uploggeddated') {
+            $('#divsuccess').html('successfully redirect into Portal').show()
+            window.setTimeout(function () {
+              window.location.href = "{% url 'clients'%}";
+            }, 3000);
+          }else {
+            $('#divErrorMsg').html('Invalid Crdenetials').show()
+            window.setTimeout(function () {
+              location.reload()
+            }, 2000);
+           
+         
+         
         }
+          }
+          
+             
+
       });
 
     });

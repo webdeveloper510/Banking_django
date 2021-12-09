@@ -1,46 +1,48 @@
 {% load crispy_forms_tags %}
 {% include 'base/header.html' %}
 {% load static %}
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-  <section class="section section-bredcrumbs">
-    <div class="container context-dark breadcrumb-wrapper">
-      <h1> Foreign Bank Register</h1>
-      <ul class="breadcrumbs-custom">
-        <li><a href="index.html">Home</a></li>
-        <li class="active">Foreign Bank Register</li>
-      </ul>
-    </div>
-  </section>
-  <div class="register">
-    <div class="container">
-      <div class="row">
-        <div class="col-md"></div>
-        <div class="col-md-6 my-5">
-          <div class="card p-3">
-            <div class="text-center">
-              <h4>Foreign Bank Registeration</h4>
-             
-            </div>
-            <!-- RD Mailform-->
-            <form id="form" class="rd-form form-lg rd-mailform">
-              <div class="form-group">
-                {% csrf_token %}
-                {{ reg_form|crispy }}
-              </div>
-              <br>
-              <button class="btn  btn-round btn-block btn-primary" id="btnSubmit" type="submit">Register</button>
-            </form>
+<section class="section section-bredcrumbs">
+  <div class="container context-dark breadcrumb-wrapper">
+    <h1> Foreign Bank Register</h1>
+    <ul class="breadcrumbs-custom">
+      <li><a href="index.html">Home</a></li>
+      <li class="active">Foreign Bank Register</li>
+    </ul>
+  </div>
+</section>
+<div class="register">
+  <div class="container">
+ <div style="display: none;" id="divSuccessMsg" class="alert alert-success mt-5" role="alert"></div>
+    <div style="display: none;" id="divErrorMsg" class="alert alert-danger mt-5" role="alert"></div>
+    <div class="row">
+      <div class="col-md"></div>
+      <div class="col-md-6 my-5">
+        <div class="card p-3">
+          <div class="text-center">
+            <h4>Foreign Bank Registeration</h4>
 
-            <p class="text-center">If you already have an account, <a href="{% url 'foreign' %}">login</a>
-              instead.</p>
           </div>
+          <!-- RD Mailform-->
+          <form id="form" class="rd-form form-lg rd-mailform">
+            <div class="form-group">
+              {% csrf_token %}
+              {{ reg_form|crispy }}
+            </div>
+            <br>
+            <button class="btn  btn-round btn-block btn-primary" id="btnSubmit" type="submit">Register</button>
+          </form>
+
+          <p class="text-center">If you already have an account, <a href="{% url 'foreign' %}">login</a>
+            instead.</p>
         </div>
-        <div class="col-md"></div>
       </div>
+      <div class="col-md"></div>
     </div>
   </div>
-  {% include 'base/footer.html' %}
+</div>
+{% include 'base/footer.html' %}
 <script>
   $(document).ready(function () {
     $("#form").submit(function (event) {
@@ -54,9 +56,19 @@
         url: "{% url 'Foreignbank'%}",
         data: $(this).serialize(), //only input
         success: function (response) {
-          window.setTimeout(function () {
-            window.location.href = "{% url 'foreign'%}";
-          }, 3000);
+          console.log(response);
+          if (response.instance = 'instance') {
+            $('#divSuccessMsg').html("successfully redirect into Portal").show()
+            window.setTimeout(function () {
+              window.location.href = "{% url 'foreign'%}";
+            }, 3000);
+
+          }else{
+            $('#divErrorMsg').html('Invalid Crdenetials').show()
+            window.setTimeout(function () {
+              location.reload()
+            }, 2000)
+          }
 
         }
       });

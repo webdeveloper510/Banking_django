@@ -8,12 +8,16 @@
       <h1> Local Bank Register</h1>
       <ul class="breadcrumbs-custom">
         <li><a href="index.html">Home</a></li>
+       
         <li class="active">Local Bank Register</li>
       </ul>
     </div>
   </section>
   <div class="register">
     <div class="container">
+      <div style="display: none;" id="divSuccessMsg"  class="alert alert-success mt-5" role="alert">
+        <div style="display: none;" id="divErrorMsg"  class="alert alert-danger mt-5" role="alert"></div>
+      </div>
       <div class="row">
         <div class="col-md"></div>
         <div class="col-md-6 my-5">
@@ -53,11 +57,21 @@
         url: "{% url 'localbank_Register'%}",
         data: $(this).serialize(), //only input
         success: function (response) {
-          window.setTimeout(function () {
+          console.log(response);
+          if (response.instance =="instance"){
+            $('#divSuccessMsg').html("successfully redirect into Portal.").show()
+            window.setTimeout(function () {
             window.location.href = "{% url 'local_login'%}";
-          }, 3000);
+          }, 5000);
 
-        }
+          }else {
+            $('#divErrorMsg').html('Something went wrong').show()
+            window.setTimeout(function () {
+              location.reload()
+            }, 2000);
+          }
+         
+        },
       });
 
     });
