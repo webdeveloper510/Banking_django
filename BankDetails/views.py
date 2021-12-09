@@ -50,7 +50,7 @@ def localbank_register_request(request):
 
     try:
         form = None
-        if request.is_ajax and request.method == "POST":
+        if request.method == "POST":
             # print(request.POST['username'])
 
             myDict = dict(zip(request.POST.keys(), request.POST.values()))
@@ -77,7 +77,7 @@ def foreign_register(request):
 
     try:
         form = None
-        if request.is_ajax and request.method == "POST":
+        if request.method == "POST":
             print(request.POST["name"])
             myDict = dict(zip(request.POST.keys(), request.POST.values()))
             del myDict["csrfmiddlewaretoken"]
@@ -106,7 +106,14 @@ def login_local(request):
 def login_page(request):
     user = None
     try:
-        if request.is_ajax and request.method == "POST":
+        
+        if request.method == "POST":
+
+            username = request.POST["username"]
+            password = request.POST["password"]
+            user = LocalBank.objects.filter(username=username, password=password).values(
+                "id", "username"
+            )
 
             username = request.POST["username"]
             password = request.POST["password"]
@@ -123,13 +130,13 @@ def login_page(request):
                 messages.success(request, "Login successfull.")
                 return JsonResponse({"instance": "user uploggeddated"})
         else:
-           return JsonResponse({"instance": "Invalid Credentials"})
+            return JsonResponse({"instance": "Invalid Credentials"})
     except Exception as e:
         return JsonResponse({"error": e}, status=400)
 
 
 def foreign_login_page(request):
-    if request.is_ajax and request.method == "POST":
+    if request.method == "POST":
 
         username = request.POST["username"]
         password = request.POST["password"]
@@ -171,7 +178,7 @@ def add_client(request):
 
     try:
         form = None
-        if request.is_ajax and request.method == "POST":
+        if  request.method == "POST":
             mydict = dict(zip(request.POST.keys(), request.POST.values()))
             del mydict["csrfmiddlewaretoken"]
             data_dict_user_profile = {
@@ -216,7 +223,7 @@ def edit_client_request(request, pk):
 def edit_client(request, pk):
     editform = None
     try:
-        if request.is_ajax and request.method == "POST":
+        if  request.method == "POST":
             data = UserProfile.objects.filter(id=pk).update(
                 name=request.POST["name"],
                 address=request.POST["address"],
@@ -246,7 +253,7 @@ def make_transaction_request(request):
     localbank = LocalBank.objects.get(id=localbankid)
     print(localbankid)
     try:
-        if request.is_ajax and request.method == "POST":
+        if  request.method == "POST":
             mydict = dict(zip(request.POST.keys(), request.POST.values()))
             del mydict["csrfmiddlewaretoken"]
             userid = request.POST["Name"]
@@ -401,7 +408,7 @@ def get_transaction_status(request):
 def confirm_status(request, pk):
     # now = datetime.datetime.now()
     date = time.strftime("%Y-%m-%d")
-    if request.is_ajax and request.method == "POST":
+    if  request.method == "POST":
         mydict = dict(zip(request.POST.keys(), request.POST.values()))
         status_update = str(mydict["status"])
         instance = None
