@@ -42,6 +42,7 @@ from datetime import datetime
 import time
 import smtplib
 import ssl
+
 # Create your views here.
 
 
@@ -107,12 +108,13 @@ def login_page(request):
 
         username = request.POST["username"]
         password = request.POST["password"]
-        user = LocalBank.objects.filter(username=username, password=password).values('id','username')
-      
-        
-        request.session["localbankid"] = user[0]['id']
+        user = LocalBank.objects.filter(username=username, password=password).values(
+            "id", "username"
+        )
+
+        request.session["localbankid"] = user[0]["id"]
         request.session["Type"] = "Local"
-        if username == user[0]['username']:
+        if username == user[0]["username"]:
             messages.success(request, "Login successfull.")
             return JsonResponse({"instance": "user uploggeddated"})
         else:
@@ -124,9 +126,8 @@ def foreign_login_page(request):
 
         username = request.POST["username"]
         password = request.POST["password"]
-        user = ForeignBank.objects.get(username=username,password=password)
-        
-        
+        user = ForeignBank.objects.get(username=username, password=password)
+
         request.session["forienid"] = user.id
         request.session["Type"] = "Foreign"
         if username == user.username:
@@ -257,10 +258,15 @@ def make_transaction_request(request):
             smtp_server = settings.EMAIL_HOST
             sender_email = settings.EMAIL_HOST_USER
             password = settings.EMAIL_HOST_PASSWORD
-            receiver_email = 'saurav@codenomad.net'
-            subject = 'Incoming Transaction from '+localbank.name
-            body = 'Please check incoming transaction of amount '+request.POST["amount"] + ' with routing number '+tobank.rountingnumber
-            message = 'Subject: {}\n\n{}'.format(subject, body)
+            receiver_email = "saurav@codenomad.net"
+            subject = "Incoming Transaction from " + localbank.name
+            body = (
+                "Please check incoming transaction of amount "
+                + request.POST["amount"]
+                + " with routing number "
+                + tobank.rountingnumber
+            )
+            message = "Subject: {}\n\n{}".format(subject, body)
             context = ssl.create_default_context()
             with smtplib.SMTP(smtp_server, port) as server:
                 server.ehlo()  # Can be omitted
