@@ -42,8 +42,25 @@ from datetime import datetime
 import time
 import smtplib
 import ssl
+from .serializers import TransactionSerializers
+from rest_framework.decorators import api_view
+from django.http import JsonResponse
+
+import base64  # Module for password encryption
+
+
+
+#  The above code is used to load all the packages from Django library or coustom files in this project 
+
+
+#  The below codes are the various functions
 
 # Create your views here.
+
+
+
+
+# # # This Api function is called when we submit the Local bank Register form from the Local register page
 
 
 def localbank_register_request(request):
@@ -55,13 +72,18 @@ def localbank_register_request(request):
 
             myDict = dict(zip(request.POST.keys(), request.POST.values()))
             del myDict["csrfmiddlewaretoken"]
+            password = myDict['password']. encode("utf-8")
+            myDict['password'] = base64. b64encode(password)
             form = LocalBank(**myDict)
             instance = form.save()
             return JsonResponse({"instance": "instance"})
 
     except Exception as e:
-        
+
         return JsonResponse({"error": e}, status=400)
+
+
+# This is the used to load the Local Register Page
 
 
 def local_register(request):
@@ -73,6 +95,7 @@ def local_register(request):
     )
 
 
+# # This Api function is called when we submit the Foreign bank Register form from the Foreign register page
 def foreign_register(request):
 
     try:
@@ -82,6 +105,8 @@ def foreign_register(request):
             myDict = dict(zip(request.POST.keys(), request.POST.values()))
             del myDict["csrfmiddlewaretoken"]
             print(myDict)
+            password = myDict['password']. encode("utf-8")
+            myDict['password'] = base64. b64encode(password)
             form = ForeignBank(**myDict)
             instance = form.save()
             return JsonResponse({"instance": "instance"})
@@ -92,10 +117,16 @@ def foreign_register(request):
         return JsonResponse({"error": e}, status=400)
 
 
+# This is the used to load the Foriegn bank Register Page
+
+
 def Foreign_bank_register(request):
     form = ForiegnBankForm()
     context = {"reg_form": ForiegnBankForm}
     return render(request, "base/another_country_bank.html", context)
+
+
+# This is the used to load the Foriegn bank login Page
 
 
 def login_local(request):
@@ -103,25 +134,30 @@ def login_local(request):
     return render(request, "base/login.html", context={"register_form": user})
 
 
+# This Api function is called when we submit the Local bank Login form from the Local Login page
+
+
 def login_page(request):
     user = None
     try:
-        
+
         if request.method == "POST":
 
             username = request.POST["username"]
             password = request.POST["password"]
-            user = LocalBank.objects.filter(username=username, password=password).values(
-                "id", "username"
-            )
+            password =password. encode("utf-8")
+            password = base64. b64encode(password)
+            user = LocalBank.objects.filter(
+                username=username, password=password
+            ).values("id", "username")
 
             username = request.POST["username"]
             password = request.POST["password"]
-            user = LocalBank.objects.filter(username=username, password=password).values(
-                "id", "username"
-            )
+            user = LocalBank.objects.filter(
+                username=username, password=password
+            ).values("id", "username")
             print(len(user))
-            if len(user)>0:
+            if len(user) > 0:
                 request.session["localbankid"] = user[0]["id"]
                 request.session["Type"] = "Local"
             else:
@@ -135,15 +171,20 @@ def login_page(request):
         return JsonResponse({"error": e}, status=400)
 
 
+# This Api function is called when we submit the Foreign bank Login form from the Foreign Login page
+
+
 def foreign_login_page(request):
     if request.method == "POST":
 
         username = request.POST["username"]
         password = request.POST["password"]
+        password =password. encode("utf-8")
+        password = base64. b64encode(password)
         user = ForeignBank.objects.filter(username=username, password=password).values(
-                "id", "username"
-            )
-        if len(user)>0:
+            "id", "username"
+        )
+        if len(user) > 0:
             request.session["forienid"] = user[0]["id"]
             request.session["Type"] = "Foreign"
         else:
@@ -156,29 +197,34 @@ def foreign_login_page(request):
             messages.error(request, "Invalid Credentials")
 
 
+# This function used to load the Foreign login page
+
+
 def foreign_login(request):
 
     user = ForiegnBankForm()
     return render(request, "base/foreignlogin.html", context={"register_form": user})
 
 
+# This function is used to load the Add client Form
+
 def add_client_request(request):
     clients = ClientForm()
     return render(request, "base/clients.html", context={"clients_form": clients})
 
+# This Api function is called when we submit the Add  Client form from the Add Client page
 
 def add_client(request):
 
     clients = None
+     
+    localbankid = request.session.get("localbankid")    # Getting Local Bank id from session
+    localbank = user = LocalBank.objects.get(id=localbankid) # Getting Local Bank instance or object 
 
-    localbankid = request.session.get("localbankid")
-    localbank = user = LocalBank.objects.get(id=localbankid)
-    localbankInstance = LocalBank.objects.filter(name=localbank)
-    print(str(localbankInstance))
 
     try:
         form = None
-        if  request.method == "POST":
+        if request.method == "POST":
             mydict = dict(zip(request.POST.keys(), request.POST.values()))
             del mydict["csrfmiddlewaretoken"]
             data_dict_user_profile = {
@@ -187,8 +233,7 @@ def add_client(request):
                 "accountnumber": request.POST["accountnumber"],
                 "name": request.POST["name"],
             }
-            # mydict["bankId"]  = localbankInstance,
-            clients = UserProfile.objects.create(**data_dict_user_profile)
+            clients = UserProfile.objects.create(**data_dict_user_profile) # Create user profile table entry
             # instance = clients.save()
             clientid = UserProfile.objects.latest("id")
 
@@ -196,14 +241,14 @@ def add_client(request):
                 "AccountNumber": request.POST["accountnumber"],
                 "UserId": clientid,
             }
-            instance = UserBalance.objects.create(**data_dict)
+            instance = UserBalance.objects.create(**data_dict) # Create user balance table entry
             return JsonResponse({"instance": "instance"})
 
     except Exception as e:
 
         return JsonResponse({"error": e}, status=400)
 
-
+#  This function used to load the show client page
 def show_clients(request):
     localid = request.session.get("localbankid")
 
@@ -211,6 +256,8 @@ def show_clients(request):
     context = {"clients_data": clients_record}
     return render(request, "base/showclients.html", context)
 
+
+# This function used to load the Edit client Page
 
 def edit_client_request(request, pk):
     editform = EditClientForm()
@@ -220,10 +267,12 @@ def edit_client_request(request, pk):
     )
 
 
+# # This Api function is called when we submit the edit  Client form from the Edit Client page
+
 def edit_client(request, pk):
     editform = None
     try:
-        if  request.method == "POST":
+        if request.method == "POST":  # Getting post request from Edit client page
             data = UserProfile.objects.filter(id=pk).update(
                 name=request.POST["name"],
                 address=request.POST["address"],
@@ -231,11 +280,12 @@ def edit_client(request, pk):
             )
             instance = data
             return JsonResponse({"instance": "instance"})
-            messages.success(request, "Client updated  successfully.")
     except Exception as e:
 
         return JsonResponse({"error": e}, status=400)
 
+
+# This page is used to load the Transaction Form
 
 def transaction(request):
     Tran_form = TransactionForm()
@@ -243,6 +293,7 @@ def transaction(request):
         request, "base/transactionForm.html", context={"transaction_form": Tran_form}
     )
 
+# This Api function is called when we submit the transaction form from the Create Transaction page
 
 def make_transaction_request(request):
     # dt = datetime.datetime.now()
@@ -250,11 +301,11 @@ def make_transaction_request(request):
     # date = strftime('%Y%M%d')
 
     localbankid = request.session.get("localbankid")
-    localbank = LocalBank.objects.get(id=localbankid)
+    localbank = LocalBank.objects.get(id=localbankid) # Getting Local bank id From session
     print(localbankid)
     try:
-        if  request.method == "POST":
-            mydict = dict(zip(request.POST.keys(), request.POST.values()))
+        if request.method == "POST":
+            mydict = dict(zip(request.POST.keys(), request.POST.values()))  # converting Queryset to python Dictionary
             del mydict["csrfmiddlewaretoken"]
             userid = request.POST["Name"]
             name = UserProfile.objects.get(id=userid)
@@ -271,7 +322,10 @@ def make_transaction_request(request):
                 "date": str(date),
             }
 
-            Transaction.objects.create(**data_dict)
+            Transaction.objects.create(**data_dict)   # submitting values to transaction page
+
+            # Email sending
+
             print(settings.EMAIL_HOST_USER)
             port = settings.EMAIL_PORT
             smtp_server = settings.EMAIL_HOST
@@ -298,6 +352,8 @@ def make_transaction_request(request):
     except Exception as e:
         return JsonResponse({"error": e}, status=400)
 
+# This Api function is called when we show the clients transactions according to the status (Pending , Confirm , complete) 
+# and in the else part we are retreiving transactions to show according to the filtering date
 
 def show_transanctions(request):
     context = None
@@ -313,10 +369,15 @@ def show_transanctions(request):
         transaction_pending = Transaction.objects.filter(
             status="pending", date=dateInSession
         ).values()
+
     else:
         transaction_pending = Transaction.objects.filter(
             FromBank_id=LocalbankID, status="pending"
         ).values()
+        data = ForeignBank.objects.get(
+            id=str(transaction_pending[0]["ForiegnBankrountingnumber_id"])
+        )
+
     if dateInSession and typeInSession == "confirm":
         transaction_confirm = Transaction.objects.filter(
             status="confirmed", confirmdate=dateInSession
@@ -341,6 +402,9 @@ def show_transanctions(request):
     }
 
     return render(request, "base/show_transactions.html", context)
+
+# This function is used to show the Foriegn Bank Transaction and in the else part we retreived the transaction for showing 
+# according to the filteratio date
 
 
 def show_foreign_transaction(request):
@@ -386,6 +450,8 @@ def show_foreign_transaction(request):
     }
     return render(request, "base/foreign_transaction.html", context)
 
+# This function is used to load the dates and stored into the session and I retreived the date matching
+#  transaction from Database on the bais of Date  
 
 def date_request(request):
     date = dict(zip(request.POST.keys(), request.POST.values()))
@@ -404,11 +470,12 @@ def get_transaction_status(request):
 
     return render(request, "base/show_transaction_status.html", context)
 
+# This function is used to confirm Pending status
 
 def confirm_status(request, pk):
     # now = datetime.datetime.now()
     date = time.strftime("%Y-%m-%d")
-    if  request.method == "POST":
+    if request.method == "POST":
         mydict = dict(zip(request.POST.keys(), request.POST.values()))
         status_update = str(mydict["status"])
         instance = None
@@ -416,13 +483,14 @@ def confirm_status(request, pk):
             instance = Transaction.objects.filter(pk=pk).update(
                 status=status_update, confirmdate=date
             )
-        elif status_update == "completed":
+        elif status_update == "complete":
             instance = Transaction.objects.filter(pk=pk).update(
                 status=status_update, completeddate=date
             )
         return JsonResponse({"instance": "instance"})
         messages.success(request, "Status Has Been  Confirmed successfully.")
 
+#  This function is used to complete pending status
 
 def show_status_comp(request):
     context = None
@@ -465,6 +533,7 @@ def header_request(request):
     print(Type)
     return render(request, "base/header.html", LocalbankID, ForeignbankID, Type)
 
+# This function is used to logout the login user
 
 def logout_request(request):
     request.session["Type"] = ""

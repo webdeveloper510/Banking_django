@@ -13,6 +13,8 @@
       </ul>
     </div>
   </section>
+
+
   <div class="register">
     <div class="container">
       <div style="display: none;" id="divSuccessMsg"  class="alert alert-success mt-5" role="alert">
@@ -26,7 +28,9 @@
               <h4>Local Bank Registration</h4>
              
             </div>
-            <!-- RD Mailform-->
+
+            <!-- Local bank  Registration Form-->
+
             <form id="form" class="rd-form form-lg rd-mailform">
               <div class="form-group">
                 {% csrf_token %}
@@ -43,7 +47,12 @@
       </div>
     </div>
   </div>
+  <!-- Included footer page -->
+
   {% include 'base/footer.html' %}
+
+<!-- Sending Form data  -->
+
 <script>
   $(document).ready(function () {
     $("#form").submit(function (event) {
